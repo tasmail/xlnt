@@ -246,7 +246,7 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="D:\WORK\thirdparty\xlnt\benchmarks\styles.cpp" />
+    <ClCompile Include="$(ProjectDir)..\..\benchmarks\styles.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\WORK\thirdparty\xlnt\build\source\xlnt.vcxproj">

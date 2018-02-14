@@ -247,7 +247,7 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="D:\WORK\thirdparty\xlnt\benchmarks\writer.cpp" />
+    <ClCompile Include="$(ProjectDir)..\..\benchmarks\writer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\WORK\thirdparty\xlnt\build\source\xlnt.vcxproj">

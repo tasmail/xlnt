@@ -246,10 +246,10 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="D:\WORK\thirdparty\xlnt\samples\sample.cpp" />
+    <ClCompile Include="$(ProjectDir)..\..\samples\sample.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\WORK\thirdparty\xlnt\build\source\xlnt.vcxproj">
+    <ProjectReference Include="$(ProjectDir)..\..\build\source\xlnt.vcxproj">
       <Project>{9A9D3CF1-C1B4-3B04-BB8F-4591B1DFDE3C}</Project>
       <Name>xlnt</Name>
     </ProjectReference>
