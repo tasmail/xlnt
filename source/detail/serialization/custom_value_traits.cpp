@@ -345,7 +345,7 @@ std::string to_string(pane_state state)
 
 bool iequals(const std::string& str1, const std::string& str2)
 {
-	return std::equal(str1.begin(), str1.end(), str2.begin(), iequal());
+	return std::equal(str1.begin(), str1.end(), str2.begin(), str2.end(), iequal());
 }
 
 } // namespace detail
