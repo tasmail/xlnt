@@ -24,6 +24,8 @@
 #pragma once
 
 #include <string>
+#include <algorithm>
+#include <cctype>
 
 #include <detail/default_case.hpp>
 #include <detail/external/include_libstudxml.hpp>
@@ -77,14 +79,16 @@ std::string to_string(pane_state state);
 template<typename T>
 static T from_string(const std::string &string_value);
 
+bool iequals(const std::string& str1, const std::string& str2);
+
 template<>
 font::underline_style from_string(const std::string &string)
 {
-    if (string == "double") return font::underline_style::double_;
-    if (string == "doubleAccounting") return font::underline_style::double_accounting;
-    if (string == "single") return font::underline_style::single;
-    if (string == "singleAccounting") return font::underline_style::single_accounting;
-    if (string == "none") return font::underline_style::none;
+    if (iequals(string, "double")) return font::underline_style::double_;
+    if (iequals(string, "doubleAccounting")) return font::underline_style::double_accounting;
+    if (iequals(string, "single")) return font::underline_style::single;
+    if (iequals(string, "singleAccounting")) return font::underline_style::single_accounting;
+    if (iequals(string, "none")) return font::underline_style::none;
 
     default_case(font::underline_style::none);
 }
@@ -92,72 +96,72 @@ font::underline_style from_string(const std::string &string)
 template<>
 relationship_type from_string(const std::string &string)
 {
-    if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument")
+    if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"))
         return relationship_type::office_document;
-    else if (string == "http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail")
+    else if (iequals(string, "http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail"))
         return relationship_type::thumbnail;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/calcChain")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/calcChain"))
         return relationship_type::calculation_chain;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties"))
         return relationship_type::extended_properties;
-    else if (string == "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties"
-        || string == "http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties")
+    else if (iequals(string, "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties")
+        || iequals(string, "http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties"))
         return relationship_type::core_properties;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet"))
         return relationship_type::worksheet;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings"))
         return relationship_type::shared_string_table;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles"))
         return relationship_type::stylesheet;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme"))
         return relationship_type::theme;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink"))
         return relationship_type::hyperlink;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chartsheet")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chartsheet"))
         return relationship_type::chartsheet;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"))
         return relationship_type::comments;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing"))
         return relationship_type::vml_drawing;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties"))
         return relationship_type::custom_properties;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/printerSettings")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/printerSettings"))
         return relationship_type::printer_settings;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/connections")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/connections"))
         return relationship_type::connections;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customProperty")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customProperty"))
         return relationship_type::custom_property;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlMappings")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlMappings"))
         return relationship_type::custom_xml_mappings;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/dialogsheet")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/dialogsheet"))
         return relationship_type::dialogsheet;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"))
         return relationship_type::drawings;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/externalLinkPath")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/externalLinkPath"))
         return relationship_type::external_workbook_references;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotTable")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotTable"))
         return relationship_type::pivot_table;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotCacheDefinition")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotCacheDefinition"))
         return relationship_type::pivot_table_cache_definition;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotCacheRecords")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotCacheRecords"))
         return relationship_type::pivot_table_cache_records;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/queryTable")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/queryTable"))
         return relationship_type::query_table;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/revisionHeaders")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/revisionHeaders"))
         return relationship_type::shared_workbook_revision_headers;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedWorkbook")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedWorkbook"))
         return relationship_type::shared_workbook;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/revisionLog")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/revisionLog"))
         return relationship_type::revision_log;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/usernames")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/usernames"))
         return relationship_type::shared_workbook_user_data;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tableSingleCells")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tableSingleCells"))
         return relationship_type::single_cell_table_definitions;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/table")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/table"))
         return relationship_type::table_definition;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/volatileDependencies")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/volatileDependencies"))
         return relationship_type::volatile_dependencies;
-    else if (string == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image")
+    else if (iequals(string, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"))
         return relationship_type::image;
 
     // ECMA 376-4 Part 1 Section 9.1.7 says consumers shall not fail to load
@@ -165,28 +169,36 @@ relationship_type from_string(const std::string &string)
     return relationship_type::unknown;
 }
 
+struct iequal
+{
+	inline bool operator()(int c1, int c2) const
+	{
+		return std::toupper(c1) == std::toupper(c2);
+	}
+};
+
 template<>
 pattern_fill_type from_string(const std::string &string)
 {
-    if (string == "darkdown") return pattern_fill_type::darkdown;
-    else if (string == "darkgray") return pattern_fill_type::darkgray;
-    else if (string == "darkgrid") return pattern_fill_type::darkgrid;
-    else if (string == "darkhorizontal") return pattern_fill_type::darkhorizontal;
-    else if (string == "darktrellis") return pattern_fill_type::darktrellis;
-    else if (string == "darkup") return pattern_fill_type::darkup;
-    else if (string == "darkvertical") return pattern_fill_type::darkvertical;
-    else if (string == "gray0625") return pattern_fill_type::gray0625;
-    else if (string == "gray125") return pattern_fill_type::gray125;
-    else if (string == "lightdown") return pattern_fill_type::lightdown;
-    else if (string == "lightgray") return pattern_fill_type::lightgray;
-    else if (string == "lightgrid") return pattern_fill_type::lightgrid;
-    else if (string == "lighthorizontal") return pattern_fill_type::lighthorizontal;
-    else if (string == "lighttrellis") return pattern_fill_type::lighttrellis;
-    else if (string == "lightup") return pattern_fill_type::lightup;
-    else if (string == "lightvertical") return pattern_fill_type::lightvertical;
-    else if (string == "mediumgray") return pattern_fill_type::mediumgray;
-    else if (string == "none") return pattern_fill_type::none;
-    else if (string == "solid") return pattern_fill_type::solid;
+    if (iequals(string, "darkdown")) return pattern_fill_type::darkdown;
+    else if (iequals(string, "darkgray")) return pattern_fill_type::darkgray;
+    else if (iequals(string, "darkgrid")) return pattern_fill_type::darkgrid;
+    else if (iequals(string, "darkhorizontal")) return pattern_fill_type::darkhorizontal;
+    else if (iequals(string, "darktrellis")) return pattern_fill_type::darktrellis;
+    else if (iequals(string, "darkup")) return pattern_fill_type::darkup;
+    else if (iequals(string, "darkvertical")) return pattern_fill_type::darkvertical;
+    else if (iequals(string, "gray0625")) return pattern_fill_type::gray0625;
+    else if (iequals(string, "gray125")) return pattern_fill_type::gray125;
+    else if (iequals(string, "lightdown")) return pattern_fill_type::lightdown;
+    else if (iequals(string, "lightgray")) return pattern_fill_type::lightgray;
+    else if (iequals(string, "lightgrid")) return pattern_fill_type::lightgrid;
+    else if (iequals(string, "lighthorizontal")) return pattern_fill_type::lighthorizontal;
+    else if (iequals(string, "lighttrellis")) return pattern_fill_type::lighttrellis;
+    else if (iequals(string, "lightup")) return pattern_fill_type::lightup;
+    else if (iequals(string, "lightvertical")) return pattern_fill_type::lightvertical;
+    else if (iequals(string, "mediumgray")) return pattern_fill_type::mediumgray;
+    else if (iequals(string, "none")) return pattern_fill_type::none;
+    else if (iequals(string, "solid")) return pattern_fill_type::solid;
 
     default_case(pattern_fill_type::none);
 }
@@ -194,8 +206,8 @@ pattern_fill_type from_string(const std::string &string)
 template<>
 gradient_fill_type from_string(const std::string &string)
 {
-    if (string == "linear") return gradient_fill_type::linear;
-    else if (string == "path") return gradient_fill_type::path;
+    if (iequals(string, "linear")) return gradient_fill_type::linear;
+    else if (iequals(string, "path")) return gradient_fill_type::path;
 
     default_case(gradient_fill_type::linear);
 }
@@ -203,20 +215,20 @@ gradient_fill_type from_string(const std::string &string)
 template<>
 border_style from_string(const std::string &string)
 {
-    if (string == "dashDot") return border_style::dashdot;
-    else if (string == "dashDotDot") return border_style::dashdotdot;
-    else if (string == "dashed") return border_style::dashed;
-    else if (string == "dotted") return border_style::dotted;
-    else if (string == "double") return border_style::double_;
-    else if (string == "hair") return border_style::hair;
-    else if (string == "medium") return border_style::medium;
-    else if (string == "mediumDashdot") return border_style::mediumdashdot;
-    else if (string == "mediumDashDotDot") return border_style::mediumdashdotdot;
-    else if (string == "mediumDashed") return border_style::mediumdashed;
-    else if (string == "none") return border_style::none;
-    else if (string == "slantDashDot") return border_style::slantdashdot;
-    else if (string == "thick") return border_style::thick;
-    else if (string == "thin") return border_style::thin;
+    if (iequals(string, "dashDot")) return border_style::dashdot;
+    else if (iequals(string, "dashDotDot")) return border_style::dashdotdot;
+    else if (iequals(string, "dashed")) return border_style::dashed;
+    else if (iequals(string, "dotted")) return border_style::dotted;
+    else if (iequals(string, "double")) return border_style::double_;
+    else if (iequals(string, "hair")) return border_style::hair;
+    else if (iequals(string, "medium")) return border_style::medium;
+    else if (iequals(string, "mediumDashdot")) return border_style::mediumdashdot;
+    else if (iequals(string, "mediumDashDotDot")) return border_style::mediumdashdotdot;
+    else if (iequals(string, "mediumDashed")) return border_style::mediumdashed;
+    else if (iequals(string, "none")) return border_style::none;
+    else if (iequals(string, "slantDashDot")) return border_style::slantdashdot;
+    else if (iequals(string, "thick")) return border_style::thick;
+    else if (iequals(string, "thin")) return border_style::thin;
 
     default_case(border_style::dashdot);
 }
@@ -224,11 +236,11 @@ border_style from_string(const std::string &string)
 template<>
 vertical_alignment from_string(const std::string &string)
 {
-    if (string == "bottom") return vertical_alignment::bottom;
-    else if (string == "center") return vertical_alignment::center;
-    else if (string == "distributed") return vertical_alignment::distributed;
-    else if (string == "justify") return vertical_alignment::justify;
-    else if (string == "top") return vertical_alignment::top;
+    if (iequals(string, "bottom")) return vertical_alignment::bottom;
+    else if (iequals(string, "center")) return vertical_alignment::center;
+    else if (iequals(string, "distributed")) return vertical_alignment::distributed;
+    else if (iequals(string, "justify")) return vertical_alignment::justify;
+    else if (iequals(string, "top")) return vertical_alignment::top;
 
     default_case(vertical_alignment::top);
 }
@@ -236,27 +248,27 @@ vertical_alignment from_string(const std::string &string)
 template<>
 horizontal_alignment from_string(const std::string &string)
 {
-    if (string == "center") return horizontal_alignment::center;
-    else if (string == "centerContinuous") return horizontal_alignment::center_continuous;
-    else if (string == "distributed") return horizontal_alignment::distributed;
-    else if (string == "fill") return horizontal_alignment::fill;
-    else if (string == "general") return horizontal_alignment::general;
-    else if (string == "justify") return horizontal_alignment::justify;
-    else if (string == "left") return horizontal_alignment::left;
-    else if (string == "right") return horizontal_alignment::right;
+    if (iequals(string, "center")) return horizontal_alignment::center;
+    else if (iequals(string, "centerContinuous")) return horizontal_alignment::center_continuous;
+    else if (iequals(string, "distributed")) return horizontal_alignment::distributed;
+    else if (iequals(string, "fill")) return horizontal_alignment::fill;
+    else if (iequals(string, "general")) return horizontal_alignment::general;
+    else if (iequals(string, "justify")) return horizontal_alignment::justify;
+    else if (iequals(string, "left")) return horizontal_alignment::left;
+    else if (iequals(string, "right")) return horizontal_alignment::right;
 
     default_case(horizontal_alignment::general);
 }
 template<>
 border_side from_string(const std::string &string)
 {
-    if (string == "bottom") return border_side::bottom;
-    else if (string == "diagonal") return border_side::diagonal;
-    else if (string == "right") return border_side::end;
-    else if (string == "horizontal") return border_side::horizontal;
-    else if (string == "left") return border_side::start;
-    else if (string == "top") return border_side::top;
-    else if (string == "vertical") return border_side::vertical;
+    if (iequals(string, "bottom")) return border_side::bottom;
+    else if (iequals(string, "diagonal")) return border_side::diagonal;
+    else if (iequals(string, "right")) return border_side::end;
+    else if (iequals(string, "horizontal")) return border_side::horizontal;
+    else if (iequals(string, "left")) return border_side::start;
+    else if (iequals(string, "top")) return border_side::top;
+    else if (iequals(string, "vertical")) return border_side::vertical;
 
     default_case(border_side::bottom);
 }
@@ -264,21 +276,21 @@ border_side from_string(const std::string &string)
 template<>
 core_property from_string(const std::string &string)
 {
-    if (string == "category") return core_property::category;
-    else if (string == "contentStatus") return core_property::content_status;
-    else if (string == "created") return core_property::created;
-    else if (string == "creator") return core_property::creator;
-    else if (string == "description") return core_property::description;
-    else if (string == "identifier") return core_property::identifier;
-    else if (string == "keywords") return core_property::keywords;
-    else if (string == "language") return core_property::language;
-    else if (string == "lastModifiedBy") return core_property::last_modified_by;
-    else if (string == "lastPrinted") return core_property::last_printed;
-    else if (string == "modified") return core_property::modified;
-    else if (string == "revision") return core_property::revision;
-    else if (string == "subject") return core_property::subject;
-    else if (string == "title") return core_property::title;
-    else if (string == "version") return core_property::version;
+    if (iequals(string, "category")) return core_property::category;
+    else if (iequals(string, "contentStatus")) return core_property::content_status;
+    else if (iequals(string, "created")) return core_property::created;
+    else if (iequals(string, "creator")) return core_property::creator;
+    else if (iequals(string, "description")) return core_property::description;
+    else if (iequals(string, "identifier")) return core_property::identifier;
+    else if (iequals(string, "keywords")) return core_property::keywords;
+    else if (iequals(string, "language")) return core_property::language;
+    else if (iequals(string, "lastModifiedBy")) return core_property::last_modified_by;
+    else if (iequals(string, "lastPrinted")) return core_property::last_printed;
+    else if (iequals(string, "modified")) return core_property::modified;
+    else if (iequals(string, "revision")) return core_property::revision;
+    else if (iequals(string, "subject")) return core_property::subject;
+    else if (iequals(string, "title")) return core_property::title;
+    else if (iequals(string, "version")) return core_property::version;
 
     default_case(core_property::category);
 }
@@ -286,33 +298,33 @@ core_property from_string(const std::string &string)
 template<>
 extended_property from_string(const std::string &string)
 {
-    if (string == "Application") return extended_property::application;
-    else if (string == "AppVersion") return extended_property::app_version;
-    else if (string == "Characters") return extended_property::characters;
-    else if (string == "CharactersWithSpaces") return extended_property::characters_with_spaces;
-    else if (string == "Company") return extended_property::company;
-    else if (string == "DigSig") return extended_property::dig_sig;
-    else if (string == "DocSecurity") return extended_property::doc_security;
-    else if (string == "HeadingPairs") return extended_property::heading_pairs;
-    else if (string == "HiddenSlides") return extended_property::hidden_slides;
-    else if (string == "HyperlinksChanged") return extended_property::hyperlinks_changed;
-    else if (string == "HyperlinkBase") return extended_property::hyperlink_base;
-    else if (string == "HLinks") return extended_property::h_links;
-    else if (string == "Lines") return extended_property::lines;
-    else if (string == "LinksUpToDate") return extended_property::links_up_to_date;
-    else if (string == "Manager") return extended_property::manager;
-    else if (string == "MMClips") return extended_property::m_m_clips;
-    else if (string == "Notes") return extended_property::notes;
-    else if (string == "Pages") return extended_property::pages;
-    else if (string == "Paragraphs") return extended_property::paragraphs;
-    else if (string == "PresentationFormat") return extended_property::presentation_format;
-    else if (string == "ScaleCrop") return extended_property::scale_crop;
-    else if (string == "SharedDoc") return extended_property::shared_doc;
-    else if (string == "Slides") return extended_property::slides;
-    else if (string == "Template") return extended_property::template_;
-    else if (string == "TitlesOfParts") return extended_property::titles_of_parts;
-    else if (string == "TotalTime") return extended_property::total_time;
-    else if (string == "Words") return extended_property::words;
+    if (iequals(string, "Application")) return extended_property::application;
+    else if (iequals(string, "AppVersion")) return extended_property::app_version;
+    else if (iequals(string, "Characters")) return extended_property::characters;
+    else if (iequals(string, "CharactersWithSpaces")) return extended_property::characters_with_spaces;
+    else if (iequals(string, "Company")) return extended_property::company;
+    else if (iequals(string, "DigSig")) return extended_property::dig_sig;
+    else if (iequals(string, "DocSecurity")) return extended_property::doc_security;
+    else if (iequals(string, "HeadingPairs")) return extended_property::heading_pairs;
+    else if (iequals(string, "HiddenSlides")) return extended_property::hidden_slides;
+    else if (iequals(string, "HyperlinksChanged")) return extended_property::hyperlinks_changed;
+    else if (iequals(string, "HyperlinkBase")) return extended_property::hyperlink_base;
+    else if (iequals(string, "HLinks")) return extended_property::h_links;
+    else if (iequals(string, "Lines")) return extended_property::lines;
+    else if (iequals(string, "LinksUpToDate")) return extended_property::links_up_to_date;
+    else if (iequals(string, "Manager")) return extended_property::manager;
+    else if (iequals(string, "MMClips")) return extended_property::m_m_clips;
+    else if (iequals(string, "Notes")) return extended_property::notes;
+    else if (iequals(string, "Pages")) return extended_property::pages;
+    else if (iequals(string, "Paragraphs")) return extended_property::paragraphs;
+    else if (iequals(string, "PresentationFormat")) return extended_property::presentation_format;
+    else if (iequals(string, "ScaleCrop")) return extended_property::scale_crop;
+    else if (iequals(string, "SharedDoc")) return extended_property::shared_doc;
+    else if (iequals(string, "Slides")) return extended_property::slides;
+    else if (iequals(string, "Template")) return extended_property::template_;
+    else if (iequals(string, "TitlesOfParts")) return extended_property::titles_of_parts;
+    else if (iequals(string, "TotalTime")) return extended_property::total_time;
+    else if (iequals(string, "Words")) return extended_property::words;
 
     default_case(extended_property::application);
 }
@@ -321,12 +333,12 @@ extended_property from_string(const std::string &string)
 template<>
 variant::type from_string(const std::string &string)
 {
-    if (string == "bool") return variant::type::boolean;
-    else if (string == "date") return variant::type::date;
-    else if (string == "i4") return variant::type::i4;
-    else if (string == "lpstr") return variant::type::lpstr;
-    else if (string == "null") return variant::type::null;
-    else if (string == "vector") return variant::type::vector;
+    if (iequals(string, "bool")) return variant::type::boolean;
+    else if (iequals(string, "date")) return variant::type::date;
+    else if (iequals(string, "i4")) return variant::type::i4;
+    else if (iequals(string, "lpstr")) return variant::type::lpstr;
+    else if (iequals(string, "null")) return variant::type::null;
+    else if (iequals(string, "vector")) return variant::type::vector;
 
     default_case(variant::type::null);
 }
@@ -335,9 +347,9 @@ variant::type from_string(const std::string &string)
 template<>
 xlnt::pane_state from_string(const std::string &string)
 {
-    if (string == "frozen") return xlnt::pane_state::frozen;
-    else if (string == "frozenSplit") return xlnt::pane_state::frozen_split;
-    else if (string == "split") return xlnt::pane_state::split;
+    if (iequals(string, "frozen")) return xlnt::pane_state::frozen;
+    else if (iequals(string, "frozenSplit")) return xlnt::pane_state::frozen_split;
+    else if (iequals(string, "split")) return xlnt::pane_state::split;
 
     default_case(xlnt::pane_state::frozen);
 }
@@ -345,8 +357,8 @@ xlnt::pane_state from_string(const std::string &string)
 template<>
 target_mode from_string(const std::string &string)
 {
-    if (string == "Internal") return target_mode::internal;
-    else if (string == "External") return target_mode::external;
+    if (iequals(string, "Internal")) return target_mode::internal;
+    else if (iequals(string, "External")) return target_mode::external;
 
     default_case(target_mode::internal);
 }
@@ -354,10 +366,10 @@ target_mode from_string(const std::string &string)
 template<>
 pane_corner from_string(const std::string &string)
 {
-    if (string == "bottomLeft") return pane_corner::bottom_left;
-    else if (string == "bottomRight") return pane_corner::bottom_right;
-    else if (string == "topLeft") return pane_corner::top_left;
-    else if (string == "topRight") return pane_corner::top_right;
+    if (iequals(string, "bottomLeft")) return pane_corner::bottom_left;
+    else if (iequals(string, "bottomRight")) return pane_corner::bottom_right;
+    else if (iequals(string, "topLeft")) return pane_corner::top_left;
+    else if (iequals(string, "topRight")) return pane_corner::top_right;
 
     default_case(pane_corner::bottom_left);
 }
