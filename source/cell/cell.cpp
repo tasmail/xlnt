@@ -863,7 +863,7 @@ bool cell::has_hyperlink() const
 
 // comment
 
-bool cell::has_comment()
+bool cell::has_comment() const
 {
     return d_->comment_.is_set();
 }
