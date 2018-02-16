@@ -58,6 +58,9 @@ class workbook;
 
 struct date;
 
+using column_properties_type = std::unordered_map<column_t, column_properties>;
+using row_properties_type = std::unordered_map<row_t, row_properties>;
+
 namespace detail {
 
 class xlsx_consumer;
@@ -275,10 +278,15 @@ public:
     /// </summary>
     xlnt::column_properties &column_properties(column_t column);
 
-    /// <summary>
-    /// Returns the column properties for the given column.
-    /// </summary>
-    const xlnt::column_properties &column_properties(column_t column) const;
+	/// <summary>
+	/// Returns the column properties for the given column.
+	/// </summary>
+	const xlnt::column_properties &column_properties(column_t column) const;
+	
+	/// <summary>
+	/// Returns the all columns properties for the given worksheet
+	/// </summary>
+	const xlnt::column_properties_type &column_properties() const;
 
     /// <summary>
     /// Returns true if column properties have been set for the given column.
@@ -301,10 +309,15 @@ public:
     /// </summary>
     xlnt::row_properties &row_properties(row_t row);
 
-    /// <summary>
-    /// Returns the row properties for the given row.
-    /// </summary>
-    const xlnt::row_properties &row_properties(row_t row) const;
+	/// <summary>
+	/// Returns the row properties for the given row.
+	/// </summary>
+	const xlnt::row_properties &row_properties(row_t row) const;
+	
+	/// <summary>
+	/// Returns the all rows properties for worksheet.
+	/// </summary>
+	const xlnt::row_properties_type &row_properties() const;
 
     /// <summary>
     /// Returns true if row properties have been set for the given row.

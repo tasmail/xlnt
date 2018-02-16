@@ -915,6 +915,11 @@ const column_properties &worksheet::column_properties(column_t column) const
     return d_->column_properties_.at(column);
 }
 
+const xlnt::column_properties_type &worksheet::column_properties() const
+{
+	return d_->column_properties_;
+}
+
 row_properties &worksheet::row_properties(row_t row)
 {
     return d_->row_properties_[row];
@@ -924,6 +929,12 @@ const row_properties &worksheet::row_properties(row_t row) const
 {
     return d_->row_properties_.at(row);
 }
+
+const xlnt::row_properties_type &worksheet::row_properties() const
+{
+	return d_->row_properties_;
+}
+
 
 void worksheet::add_row_properties(row_t row, const xlnt::row_properties &props)
 {

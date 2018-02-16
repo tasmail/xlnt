@@ -93,8 +93,8 @@ struct worksheet_impl
     std::size_t id_;
     std::string title_;
 
-    std::unordered_map<column_t, column_properties> column_properties_;
-    std::unordered_map<row_t, row_properties> row_properties_;
+	column_properties_type column_properties_;
+	row_properties_type row_properties_;
 
     std::unordered_map<row_t, std::unordered_map<column_t, cell_impl>> cell_map_;
 
