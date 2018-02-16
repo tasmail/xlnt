@@ -232,6 +232,16 @@ private:
 	/// <summary>
 	///
 	/// </summary>
+	void read_drawings(worksheet ws);
+
+	/// <summary>
+	///
+	/// </summary>
+	//void read_drawing_marker();
+
+	/// <summary>
+	///
+	/// </summary>
 	void read_drawings();
 
 	// Unknown Parts

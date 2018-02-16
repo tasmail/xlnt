@@ -1033,14 +1033,28 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
             auto vml_drawings_part = manifest.canonicalize({ workbook_rel, sheet_rel,
                 manifest.relationship(sheet_path, xlnt::relationship_type::vml_drawing) });
 
-            auto vml_drawings_part_streambuf = archive_->open(comments_part);
-            std::istream vml_drawings_part_stream(comments_part_streambuf.get());
+            auto vml_drawings_part_streambuf = archive_->open(vml_drawings_part);
+            std::istream vml_drawings_part_stream(vml_drawings_part_streambuf.get());
             xml::parser vml_parser(vml_drawings_part_stream, vml_drawings_part.string(), receive);
             parser_ = &vml_parser;
 
             read_vml_drawings(ws);
         }
     }
+
+	if (manifest.has_relationship(sheet_path, xlnt::relationship_type::drawings))
+	{
+		auto drawings_part = manifest.canonicalize({ workbook_rel, sheet_rel,
+			manifest.relationship(sheet_path, xlnt::relationship_type::drawings) });
+
+		auto drawings_part_streambuf = archive_->open(drawings_part);
+		std::istream drawings_part_stream(drawings_part_streambuf.get());
+		auto receive = xml::parser::receive_default;
+		xml::parser parser(drawings_part_stream, drawings_part.string(), receive);
+		parser_ = &parser;
+
+		read_drawings(ws);
+	}
 
     return ws;
 }
@@ -1594,14 +1608,14 @@ void xlsx_consumer::read_office_document(const std::string &content_type) // CT_
                 relationship_type::stylesheet)});
     }
 
-    if (manifest().has_relationship(workbook_path, relationship_type::theme))
-    {
-        read_part({workbook_rel,
-            manifest().relationship(workbook_path,
-                relationship_type::theme)});
-    }
+	if (manifest().has_relationship(workbook_path, relationship_type::theme))
+	{
+		read_part({ workbook_rel,
+			manifest().relationship(workbook_path,
+				relationship_type::theme) });
+	}
 
-    for (auto worksheet_rel : manifest().relationships(workbook_path, relationship_type::worksheet))
+	for (auto worksheet_rel : manifest().relationships(workbook_path, relationship_type::worksheet))
     {
         auto title = std::find_if(target_.d_->sheet_title_rel_id_map_.begin(),
             target_.d_->sheet_title_rel_id_map_.end(),
@@ -2350,6 +2364,38 @@ void xlsx_consumer::read_theme()
 void xlsx_consumer::read_volatile_dependencies()
 {
 }
+
+void xlsx_consumer::read_drawings(worksheet /*ws*/)
+{
+	expect_start_element(qn("spreadsheetdrawing", "wsDr"), xml::content::complex);
+
+	expect_start_element(qn("spreadsheetdrawing", "twoCellAnchor"), xml::content::complex);
+
+	expect_start_element(qn("spreadsheetdrawing", "from"), xml::content::complex);
+
+	expect_start_element(qn("spreadsheetdrawing", "col"), xml::content::simple);
+	auto from_col = read_text();
+	expect_end_element(qn("spreadsheetdrawing", "col"));
+	
+	expect_start_element(qn("spreadsheetdrawing", "colOff"), xml::content::simple);
+	auto from_colOff = read_text();
+	expect_end_element(qn("spreadsheetdrawing", "colOff"));
+
+	expect_start_element(qn("spreadsheetdrawing", "row"), xml::content::simple);
+	auto from_row = read_text();
+	expect_end_element(qn("spreadsheetdrawing", "row"));
+
+	expect_start_element(qn("spreadsheetdrawing", "rowOff"), xml::content::simple);
+	auto from_rowOff = read_text();
+	expect_end_element(qn("spreadsheetdrawing", "rowOff"));
+
+	expect_end_element(qn("spreadsheetdrawing", "from"));
+
+	expect_end_element(qn("spreadsheetdrawing", "twoCellAnchor"));
+	
+	expect_end_element(qn("spreadsheetdrawing", "wsDr"));
+}
+
 
 // Sheet Relationship Target Parts
 

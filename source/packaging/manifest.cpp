@@ -37,7 +37,7 @@ void manifest::clear()
     relationships_.clear();
 }
 
-path manifest::canonicalize(const std::vector<xlnt::relationship> &rels) const
+path manifest::canonicalize(const manifest::relationship_vector &rels) const
 {
     xlnt::path relative;
 
@@ -102,9 +102,9 @@ relationship manifest::relationship(const path &part, relationship_type type) co
     throw key_not_found();
 }
 
-std::vector<xlnt::relationship> manifest::relationships(const path &part, relationship_type type) const
+manifest::relationship_vector manifest::relationships(const path &part, relationship_type type) const
 {
-    std::vector<xlnt::relationship> matches;
+	manifest::relationship_vector matches;
 
     if (has_relationship(part, type))
     {
@@ -118,6 +118,24 @@ std::vector<xlnt::relationship> manifest::relationships(const path &part, relati
     }
 
     return matches;
+}
+
+manifest::relationship_vector manifest::relationships(relationship_type type) const
+{
+	manifest::relationship_vector matches;
+
+	for (const auto &rels : relationships_)
+	{
+		for (const auto &rel : rels.second)
+		{
+			if (rel.second.type() == type)
+			{
+				matches.push_back(rel.second);
+			}
+		}
+	}
+
+	return matches;
 }
 
 std::string manifest::content_type(const path &part) const
@@ -166,7 +184,7 @@ std::vector<relationship> manifest::relationships(const path &part) const
         return {};
     }
 
-    std::vector<xlnt::relationship> relationships;
+	manifest::relationship_vector relationships;
 
     for (const auto &rel : relationships_.at(part))
     {

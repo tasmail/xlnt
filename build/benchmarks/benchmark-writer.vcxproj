@@ -107,7 +107,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\tests;$(SolutionDir)..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\WORK\thirdparty\xlnt\benchmarks\..\tests;$(SolutionDir)..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\tests;$(SolutionDir)..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -250,7 +250,7 @@
     <ClCompile Include="$(ProjectDir)..\..\benchmarks\writer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\WORK\thirdparty\xlnt\build\source\xlnt.vcxproj">
+    <ProjectReference Include="$(ProjectDir)..\..\build\source\xlnt.vcxproj">
       <Project>{9A9D3CF1-C1B4-3B04-BB8F-4591B1DFDE3C}</Project>
       <Name>xlnt</Name>
     </ProjectReference>

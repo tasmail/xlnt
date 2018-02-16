@@ -40,6 +40,9 @@ namespace xlnt {
 class XLNT_API manifest
 {
 public:
+
+	using relationship_vector = std::vector<xlnt::relationship>;
+
     /// <summary>
     /// Unregisters all default and override type and all relationships and known parts.
     /// </summary>
@@ -78,18 +81,23 @@ public:
     /// <summary>
     /// Returns all relationship with "source" as the source.
     /// </summary>
-    std::vector<xlnt::relationship> relationships(const path &source) const;
+	relationship_vector relationships(const path &source) const;
 
-    /// <summary>
-    /// Returns all relationships with "source" as the source and with a type of "type".
-    /// </summary>
-    std::vector<xlnt::relationship> relationships(const path &source, relationship_type type) const;
+	/// <summary>
+	/// Returns all relationships with "source" as the source and with a type of "type".
+	/// </summary>
+	relationship_vector relationships(const path &source, relationship_type type) const;
+	
+	/// <summary>
+	/// Returns all relationships with a type of "type".
+	/// </summary>
+	relationship_vector relationships(relationship_type type) const;
 
     /// <summary>
     /// Returns the canonical path of the chain of relationships by traversing through rels
     /// and forming the absolute combined path.
     /// </summary>
-    path canonicalize(const std::vector<xlnt::relationship> &rels) const;
+    path canonicalize(const relationship_vector &rels) const;
 
     /// <summary>
     /// Registers a new relationship by specifying all of the relationship properties explicitly.

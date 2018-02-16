@@ -21,21 +21,41 @@
 // @license: http://www.opensource.org/licenses/mit-license.php
 // @author: see AUTHORS file
 
+#include <helpers/path_helper.hpp>
 #include <xlnt/xlnt.hpp>
+
+void sample1()
+{
+	xlnt::workbook wb_image;
+	wb_image.load(path_helper::sample_file("image.xlsx"));
+	auto images = wb_image.manifest().relationships(xlnt::relationship_type::image);
+	for (const auto &img : images)
+	{
+		printf(img.target().to_string().c_str());
+	}
+}
+
+void sample2()
+{
+	xlnt::workbook wb;
+	xlnt::worksheet ws = wb.active_sheet();
+
+	ws.cell("A1").value(5);
+	ws.cell("B2").value("string data");
+	ws.cell("C3").formula("=RAND()");
+
+	ws.merge_cells("C3:C4");
+	ws.freeze_panes("B2");
+
+	wb.save("sample.xlsx");
+}
+
 
 int main()
 {
-    xlnt::workbook wb;
-    xlnt::worksheet ws = wb.active_sheet();
+	sample1();
 
-    ws.cell("A1").value(5);
-    ws.cell("B2").value("string data");
-    ws.cell("C3").formula("=RAND()");
-
-    ws.merge_cells("C3:C4");
-    ws.freeze_panes("B2");
-
-    wb.save("sample.xlsx");
+	sample2();
 
     return 0;
 }

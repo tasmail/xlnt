@@ -128,6 +128,7 @@ const std::unordered_map<std::string, std::string> &constants::namespaces()
             {"content-types", "http://schemas.openxmlformats.org/package/2006/content-types"},
             {"relationships", "http://schemas.openxmlformats.org/package/2006/relationships"},
             {"drawingml", "http://schemas.openxmlformats.org/drawingml/2006/main"},
+			{ "spreadsheetdrawing", "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" },
             {"workbook", "http://schemas.openxmlformats.org/spreadsheetml/2006/main"},
             {"core-properties", "http://schemas.openxmlformats.org/package/2006/metadata/core-properties"},
             {"extended-properties", "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"},
