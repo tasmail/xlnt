@@ -211,6 +211,11 @@ public:
     /// </summary>
     const class style style() const;
 
+	/// <summary>
+	/// Returns true if other is to less of this format.
+	/// </summary>
+	bool operator<(const format &other) const;
+
 private:
     friend struct detail::stylesheet;
     friend class detail::xlsx_producer;

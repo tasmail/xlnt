@@ -129,7 +129,17 @@ public:
 			&& (!has_value_ || (has_value_ && value_ == other.value_));
 	}
 	
-    /// <summary>
+	/// <summary>
+	/// Returns false if neither this nor other have a value
+	/// or both have a value and those values are equal according to
+	/// their equality operator.
+	/// </summary>
+	bool operator!=(const optional<T> &other) const
+	{
+		return !((*this) == other);
+	}
+	
+	/// <summary>
     /// Returns true if this is less to other
     /// </summary>
 	bool operator<(const optional<T> &other) const

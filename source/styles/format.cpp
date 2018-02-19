@@ -206,5 +206,9 @@ void format::quote_prefix(bool quote)
     d_->quote_prefix_ = quote;
 }
 
+bool format::operator<(const format &other) const
+{
+	return (*d_) < (*other.d_);
+}
 
 } // namespace xlnt

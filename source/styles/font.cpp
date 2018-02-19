@@ -181,6 +181,11 @@ font &font::charset(std::size_t charset)
     return *this;
 }
 
+std::size_t font::charset() const
+{
+	return charset_.get();
+}
+
 bool font::has_scheme() const
 {
     return scheme_.is_set();

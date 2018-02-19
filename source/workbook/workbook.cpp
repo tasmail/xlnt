@@ -1231,6 +1231,11 @@ void workbook::apply_to_cells(std::function<void(cell)> f)
     }
 }
 
+std::size_t workbook::format_count() const
+{
+	return d_->stylesheet_.get().format_count();
+}
+
 format workbook::format(std::size_t format_index)
 {
     return d_->stylesheet_.get().format(format_index);

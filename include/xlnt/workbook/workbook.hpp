@@ -627,6 +627,11 @@ public:
 
     // Formats
 
+	/// <summary>
+	/// Returns the count of formats in xl/styles.xml.
+	/// </summary>
+	std::size_t format_count() const;
+
     /// <summary>
     /// Returns the cell format at the given index. The index is the position of
     /// the format in xl/styles.xml.
