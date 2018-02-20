@@ -144,8 +144,13 @@ public:
     /// </summary>
 	bool operator<(const optional<T> &other) const
 	{
-		return has_value_ < other.has_value_
-			&& (!has_value_ || (has_value_ && value_ < other.value_));
+		if (has_value_ != other.has_value_)
+			return has_value_ < other.has_value_;
+
+		if (!has_value_)
+			return false;
+
+		return value_ < other.value_;
 	}
 
 private:
