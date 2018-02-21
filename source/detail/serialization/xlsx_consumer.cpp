@@ -467,12 +467,19 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
                     {
                         selection current_selection;
 
-                        if (parser().attribute_present("activeCell"))
-                        {
-                            current_selection.active_cell(parser().attribute("activeCell"));
-                        }
-                        
-                        current_selection.pane(pane_corner::top_left);
+						if (parser().attribute_present("pane"))
+						{
+							current_selection.pane(parser().attribute<pane_corner>("pane"));
+						}
+						else
+						{
+							current_selection.pane(pane_corner::top_left);
+						}
+
+						if (parser().attribute_present("activeCell"))
+						{
+							current_selection.active_cell(parser().attribute("activeCell"));
+						}
 
                         new_view.add_selection(current_selection);
 
