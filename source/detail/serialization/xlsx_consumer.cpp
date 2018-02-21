@@ -2095,10 +2095,17 @@ void xlsx_consumer::read_stylesheet()
                 record.first.border_id = parser().attribute_present("borderId")
                     ? parser().attribute<std::size_t>("borderId") : 0;
 
-                record.first.fill_applied = parser().attribute_present("applyFill")
-                    && is_true(parser().attribute("applyFill"));
                 record.first.fill_id = parser().attribute_present("fillId")
                     ? parser().attribute<std::size_t>("fillId") : 0;
+				
+				if (parser().attribute_present("applyFill"))
+				{ 
+					record.first.fill_applied = is_true(parser().attribute("applyFill"));
+				}
+				else
+				{
+					record.first.fill_applied = record.first.fill_id.is_set() && record.first.fill_id.get() != 0;
+				}
 
                 record.first.font_applied = parser().attribute_present("applyFont")
                     && is_true(parser().attribute("applyFont"));
