@@ -483,7 +483,15 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
 						
 						if (parser().attribute_present("sqref"))
 						{
-							current_selection.sqref(range_reference(parser().attribute("sqref")));
+							const auto sqref = parser().attribute("sqref");
+
+							selection::list_range_reference sqref_list;
+							std::istringstream f(sqref);
+							std::string item;
+							while (getline(f, item, ' ')) 
+								sqref_list.push_back(range_reference(item));
+
+							current_selection.sqref(sqref_list);
 						}
 
                         new_view.add_selection(current_selection);

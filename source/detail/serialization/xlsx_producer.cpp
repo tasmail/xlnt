@@ -2084,6 +2084,9 @@ void xlsx_producer::write_worksheet(const relationship &rel)
             if (current_selection.has_active_cell())
             {
                 write_attribute("activeCell", current_selection.active_cell().to_string());
+
+				// TODO: write list of selected cells in correct way (sqref list)
+
                 write_attribute("sqref", current_selection.active_cell().to_string());
             }
             /*

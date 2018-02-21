@@ -36,6 +36,8 @@ namespace xlnt {
 class XLNT_API selection
 {
 public:
+	using list_range_reference = std::list<range_reference>;
+
     /// <summary>
     /// Returns true if this selection has a defined active cell.
     /// </summary>
@@ -63,12 +65,12 @@ public:
     /// <summary>
     /// Returns the range encompassed by this selection.
     /// </summary>
-	range_reference sqref() const
+	const list_range_reference& sqref() const
 	{
 		return sqref_;
 	}
 	
-	void sqref(const range_reference& sqref)
+	void sqref(const list_range_reference& sqref)
 	{
 		sqref_ = sqref;
 	}
@@ -109,7 +111,7 @@ private:
     /// <summary>
     /// The range
     /// </summary>
-    range_reference sqref_;
+	list_range_reference sqref_;
 
     /// <summary>
     /// The quadrant
