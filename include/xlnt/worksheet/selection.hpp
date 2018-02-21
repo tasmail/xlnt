@@ -63,10 +63,15 @@ public:
     /// <summary>
     /// Returns the range encompassed by this selection.
     /// </summary>
-    range_reference sqref() const
-    {
-        return sqref_;
-    }
+	range_reference sqref() const
+	{
+		return sqref_;
+	}
+	
+	void sqref(const range_reference& sqref)
+	{
+		sqref_ = sqref;
+	}
 
     /// <summary>
     /// Returns the sheet quadrant of this selection.

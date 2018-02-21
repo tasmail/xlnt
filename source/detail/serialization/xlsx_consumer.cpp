@@ -480,6 +480,11 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
 						{
 							current_selection.active_cell(parser().attribute("activeCell"));
 						}
+						
+						if (parser().attribute_present("sqref"))
+						{
+							current_selection.sqref(range_reference(parser().attribute("sqref")));
+						}
 
                         new_view.add_selection(current_selection);
 
