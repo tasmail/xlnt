@@ -216,6 +216,11 @@ public:
 	/// </summary>
 	bool operator<(const format &other) const;
 
+	/// <summary>
+	/// Returns string representation of this format.
+	/// </summary>
+	std::string to_string() const;
+
 private:
     friend struct detail::stylesheet;
     friend class detail::xlsx_producer;

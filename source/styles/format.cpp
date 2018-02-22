@@ -211,4 +211,9 @@ bool format::operator<(const format &other) const
 	return (*d_) < (*other.d_);
 }
 
+std::string format::to_string() const
+{
+	return d_->to_string();
+}
+
 } // namespace xlnt

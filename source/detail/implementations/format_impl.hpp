@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <sstream>
 
 #include <xlnt/styles/alignment.hpp>
 #include <xlnt/styles/border.hpp>
@@ -125,6 +126,36 @@ struct format_impl
 			return left.style < right.style;
 
 		return false;
+	}
+
+	std::string to_string() const
+	{
+		std::ostringstream ss;
+
+		ss << "id:'" << id << "' ";
+
+		if (alignment_id.is_set())
+			ss << "alignment_id:'" << alignment_id.get() << "' ";
+		
+		if (border_id.is_set())
+			ss << "border_id:'" << border_id.get() << "' ";
+		
+		if (fill_id.is_set())
+			ss << "fill_id:'" << fill_id.get() << "' ";
+		
+		if (font_id.is_set())
+			ss << "font_id:'" << font_id.get() << "' ";
+		
+		if (number_format_id.is_set())
+			ss << "number_format_id:'" << number_format_id.get() << "' ";
+		
+		if (protection_id.is_set())
+			ss << "protection_id:'" << protection_id.get() << "' ";
+		
+		if (style.is_set())
+			ss << "style:'" << style.get() << "' ";
+
+		return ss.str();
 	}
 };
 
