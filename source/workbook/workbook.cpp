@@ -1199,6 +1199,13 @@ format workbook::create_format(bool default_format)
     return d_->stylesheet_.get().create_format(default_format);
 }
 
+const stylesheetview& workbook::stylesheet()
+{
+	if (stylesheetview_ == nullptr)
+		stylesheetview_.reset(new stylesheetview(d_->stylesheet_.get()));
+	return *stylesheetview_.get();
+}
+
 bool workbook::has_style(const std::string &name) const
 {
     return d_->stylesheet_.get().has_style(name);

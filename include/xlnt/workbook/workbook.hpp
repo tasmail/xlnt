@@ -74,6 +74,7 @@ class workbook_view;
 class worksheet;
 class worksheet_iterator;
 class zip_file;
+class stylesheetview;
 
 struct datetime;
 
@@ -91,6 +92,7 @@ class xlsx_producer;
 /// </summary>
 class XLNT_API workbook
 {
+	std::unique_ptr<stylesheetview> stylesheetview_;
 public:
     /// <summary>
     /// typedef for the iterator used for iterating through this workbook
@@ -656,6 +658,11 @@ public:
     void clear_formats();
 
     // Styles
+
+	/// <summary>
+	/// Returns stylesheet objects to access fonts, colors, borders lists.
+	/// </summary>
+	const stylesheetview& stylesheet();
 
     /// <summary>
     /// Returns true if this workbook has a style with a name of name.

@@ -258,4 +258,41 @@ private:
     detail::style_impl *d_;
 };
 
+class XLNT_API stylesheetview
+{
+	detail::stylesheet &parent_;
+public:
+	using vector_alignments = std::vector<alignment>;
+	using vector_borders = std::vector<border>;
+	using vector_fills = std::vector<fill>;
+	using vector_fonts = std::vector<font>;
+	using vector_number_formats = std::vector<number_format>;
+	using vector_protections = std::vector<protection>;
+	using vector_colors = std::vector<color>;
+
+	/// <summary>
+	/// Delete zero-argument constructor
+	/// </summary>
+	stylesheetview() = delete;
+
+	/// <summary>
+	/// Default copy constructor.
+	/// </summary>
+	stylesheetview(detail::stylesheet &parent);
+
+	const vector_alignments &alignments() const;
+
+	const vector_borders &borders() const;
+
+	const vector_fills &fills() const;
+
+	const vector_fonts &fonts() const;
+
+	const vector_number_formats &number_formats() const;
+
+	const vector_protections &protections() const;
+
+	const vector_colors &colors() const;
+};
+
 } // namespace xlnt

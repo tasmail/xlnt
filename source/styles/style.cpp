@@ -236,4 +236,47 @@ void style::quote_prefix(bool quote)
     d_->quote_prefix_ = quote;
 }
 
+/// <summary>
+/// Default copy constructor.
+/// </summary>
+stylesheetview::stylesheetview(detail::stylesheet &parent)
+	: parent_(parent)
+{
+}
+
+const stylesheetview::vector_alignments &stylesheetview::alignments() const
+{
+	return parent_.alignments;
+}
+
+const stylesheetview::vector_borders &stylesheetview::borders() const
+{
+	return parent_.borders;
+}
+
+const stylesheetview::vector_fills &stylesheetview::fills() const
+{
+	return parent_.fills;
+}
+
+const stylesheetview::vector_fonts &stylesheetview::fonts() const
+{
+	return parent_.fonts;
+}
+
+const stylesheetview::vector_number_formats &stylesheetview::number_formats() const
+{
+	return parent_.number_formats;
+}
+
+const stylesheetview::vector_protections &stylesheetview::protections() const
+{
+	return parent_.protections;
+}
+
+const stylesheetview::vector_colors &stylesheetview::colors() const
+{
+	return parent_.colors;
+}
+
 } // namespace xlnt
