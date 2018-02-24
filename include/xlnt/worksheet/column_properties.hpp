@@ -55,6 +55,22 @@ public:
     /// If true, this column will be hidden
     /// </summary>
     bool hidden = false;
+
+	// operators
+
+	/// <summary>
+	/// Returns true if this column props the same column props as comparand (compared by reference).
+	/// </summary>
+	bool operator==(const column_properties &comparand) const
+	{
+		return
+			comparand.custom_width == custom_width &&
+			comparand.width == width &&
+			comparand.style == style &&
+			comparand.hidden == hidden;
+	};
+
+
 };
 
 } // namespace xlnt
