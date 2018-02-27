@@ -238,6 +238,11 @@ number_format::number_format() : number_format("General", 0)
 {
 }
 
+number_format::number_format(const number_format& other)
+{
+	(*this) = other;
+}
+
 number_format::number_format(std::size_t id)
     : number_format(from_builtin_id(id))
 {
@@ -357,6 +362,16 @@ bool number_format::operator==(const number_format &other) const
 bool number_format::operator!=(const number_format &other) const
 {
     return !(*this == other);
+}
+
+number_format &number_format ::operator=(const number_format &other)
+{
+	if (other.id_.is_set())
+		id_ = other.id_;
+
+	format_string_ = other.format_string_;
+
+	return (*this);
 }
 
 } // namespace xlnt

@@ -57,6 +57,11 @@ public:
     /// </summary>
     font();
 
+	/// <summary>
+	/// Constructs a copy of font object.
+	/// </summary>
+	font(const font &other);
+
     /// <summary>
     /// Sets the bold state of the font to bold and returns a reference to the font.
     /// </summary>
@@ -239,6 +244,10 @@ public:
     /// </summary>
     bool operator!=(const font &other) const;
 
+	/// <summary>
+	/// Returns copy of the font object.
+	/// </summary>
+	font &operator=(const font &other);
 private:
     friend class style;
 

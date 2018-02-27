@@ -34,6 +34,11 @@ font::font()
 {
 }
 
+font::font(const font &other)
+{
+	(*this) = other;
+}
+
 font &font::bold(bool bold)
 {
     bold_ = bold;
@@ -370,4 +375,23 @@ bool font::operator<(const font &other) const
 	return false;
 }
 
+font &font::operator=(const font &other)
+{
+	name_ = other.name_;
+	size_ = other.size_;
+	bold_ = other.bold_;
+	italic_ = other.italic_;
+	superscript_ = other.superscript_;
+	subscript_ = other.subscript_;
+	strikethrough_ = other.strikethrough_;
+	outline_ = other.outline_;
+	shadow_ = other.shadow_;
+	underline_ = other.underline_;
+	color_ = other.color_;
+	family_ = other.family_;
+	charset_ = other.charset_;
+	scheme_ = other.scheme_;
+	
+	return (*this);
+}
 } // namespace xlnt
