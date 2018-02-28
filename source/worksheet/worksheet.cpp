@@ -274,7 +274,11 @@ cell_reference worksheet::frozen_panes() const
         throw xlnt::invalid_attribute();
     }
 
-    return d_->views_.front().pane().top_left_cell.get();
+	auto& pane = d_->views_.front().pane();
+
+	cell_reference res(pane.x_split, pane.y_split);
+
+    return res;
 }
 
 void worksheet::freeze_panes(xlnt::cell top_left_cell)
@@ -348,6 +352,35 @@ void worksheet::unfreeze_panes()
 
     primary_view.clear_selections();
     primary_view.clear_pane();
+}
+
+bool worksheet::has_top_left_cell() const
+{
+	if (!has_view()) 
+		return false;
+	auto &primary_view = d_->views_.front();
+	return primary_view.has_top_left_cell();
+}
+
+const cell_reference worksheet::top_left_cell() const
+{
+	if (!has_view())
+		return cell_reference(1,1);
+	auto &primary_view = d_->views_.front();
+
+	return primary_view.top_left_cell();
+}
+
+void worksheet::top_left_cell(const cell_reference& top_left_cell)
+{
+	if (!has_view())
+	{
+		d_->views_.push_back(sheet_view());
+	}
+
+	auto &primary_view = d_->views_.front();
+
+	primary_view.top_left_cell(top_left_cell);
 }
 
 void worksheet::active_cell(const cell_reference &ref)
