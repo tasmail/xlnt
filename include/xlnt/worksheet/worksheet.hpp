@@ -174,6 +174,21 @@ public:
     /// </summary>
     bool has_frozen_panes() const;
 
+	/// <summary>
+	/// Returns true if this view has a top_left_cell defined.
+	/// </summary>
+	bool has_top_left_cell() const;
+
+	/// <summary>
+	/// Returns the first top left visible cell.
+	/// </summary>
+	const cell_reference top_left_cell() const;
+
+	/// <summary>
+	/// Set the first top left visible cell.
+	/// </summary>
+	void top_left_cell(const cell_reference& top_left_cell);
+
     // container
 
     /// <summary>

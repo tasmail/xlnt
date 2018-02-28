@@ -2056,7 +2056,11 @@ void xlsx_producer::write_worksheet(const relationship &rel)
             const auto &current_pane = view.pane();
             write_start_element(xmlns, "pane"); // CT_Pane
 
-            if (current_pane.top_left_cell.is_set())
+			if (view.has_top_left_cell())
+			{
+				write_attribute("topLeftCell", view.top_left_cell().to_string());
+			}
+            else if (current_pane.top_left_cell.is_set())
             {
                 write_attribute("topLeftCell", current_pane.top_left_cell.get().to_string());
             }
@@ -2076,6 +2080,11 @@ void xlsx_producer::write_worksheet(const relationship &rel)
 
             write_end_element(xmlns, "pane");
         }
+		else if (view.has_top_left_cell())
+		{
+			write_attribute("topLeftCell", view.top_left_cell().to_string());
+		}
+
 
         for (const auto &current_selection : view.selections())
         {

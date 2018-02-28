@@ -417,7 +417,12 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
                     new_view.default_grid_color(is_true(parser().attribute("defaultGridColor")));
                 }
 
-                if (parser().attribute_present("view") && parser().attribute("view") != "normal")
+				if (parser().attribute_present("topLeftCell")) 
+				{
+					new_view.top_left_cell(cell_reference(parser().attribute("topLeftCell")));
+				}
+
+				if (parser().attribute_present("view") && parser().attribute("view") != "normal")
                 {
                     new_view.type(parser().attribute("view") == "pageBreakPreview"
                         ? sheet_view_type::page_break_preview

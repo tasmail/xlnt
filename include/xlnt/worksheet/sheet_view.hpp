@@ -192,6 +192,35 @@ public:
         return type_;
     }
 
+	/// <summary>
+	/// Returns true if this view has a top_left_cell defined.
+	/// </summary>
+	bool has_top_left_cell() const
+	{
+		return top_left_cell_.is_set() || (pane_.is_set() && pane_.get().top_left_cell.is_set());
+	}
+
+	/// <summary>
+	/// Returns the first top left visible cell.
+	/// </summary>
+	cell_reference top_left_cell() const
+	{
+		if (top_left_cell_.is_set())
+			return top_left_cell_.get();
+		return pane_.get().top_left_cell.get();
+	}
+
+	/// <summary>
+	/// Set the first top left visible cell.
+	/// </summary>
+	void top_left_cell(const cell_reference& top_left_cell)
+	{
+		if (pane_.is_set())
+			pane_.get().top_left_cell = top_left_cell;
+		else 
+			top_left_cell_ = top_left_cell;
+	}
+
     /// <summary>
     /// Returns true if this view is equal to rhs based on its id, grid lines setting,
     /// default grid color, pane, and selections.
@@ -235,6 +264,11 @@ private:
     /// The collection of selections
     /// </summary>
     std::vector<xlnt::selection> selections_;
+
+	/// <summary>
+	/// The first top left visible cell.
+	/// </summary>
+	optional<cell_reference> top_left_cell_;
 };
 
 } // namespace xlnt

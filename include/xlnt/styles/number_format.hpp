@@ -181,10 +181,15 @@ public:
     /// </summary>
     static const number_format &from_builtin_id(std::size_t builtin_id);
 
-    /// <summary>
-    /// Constructs a default number_format equivalent to "General"
-    /// </summary>
-    number_format();
+	/// <summary>
+	/// Constructs a default number_format equivalent to "General"
+	/// </summary>
+	number_format();
+	
+	/// <summary>
+	/// Constructs a copy of number_format object.
+	/// </summary>
+	number_format(const number_format& other);
 
     /// <summary>
     /// Constructs a number format equivalent to that returned from number_format::from_builtin_id(builtin_id).
@@ -259,6 +264,10 @@ public:
     /// </summary>
     bool operator!=(const number_format &other) const;
 
+	/// <summary>
+	/// Returns copy of the number format object.
+	/// </summary>
+	number_format &operator=(const number_format &other);
 private:
     /// <summary>
     /// The optional ID
