@@ -2448,33 +2448,79 @@ void xlsx_consumer::read_volatile_dependencies()
 {
 }
 
-void xlsx_consumer::read_drawings(worksheet /*ws*/)
+
+void xlsx_consumer::read_drawing_anchor(const std::string& name, cell_reference&cell_reference)
 {
-	expect_start_element(qn("spreadsheetdrawing", "wsDr"), xml::content::complex);
-
-	expect_start_element(qn("spreadsheetdrawing", "twoCellAnchor"), xml::content::complex);
-
-	expect_start_element(qn("spreadsheetdrawing", "from"), xml::content::complex);
+	expect_start_element(qn("spreadsheetdrawing", name), xml::content::complex);
 
 	expect_start_element(qn("spreadsheetdrawing", "col"), xml::content::simple);
-	auto from_col = read_text();
+	cell_reference.column_index(std::stoi(read_text()));
 	expect_end_element(qn("spreadsheetdrawing", "col"));
-	
+
 	expect_start_element(qn("spreadsheetdrawing", "colOff"), xml::content::simple);
-	auto from_colOff = read_text();
+	read_text();
 	expect_end_element(qn("spreadsheetdrawing", "colOff"));
 
 	expect_start_element(qn("spreadsheetdrawing", "row"), xml::content::simple);
-	auto from_row = read_text();
+	cell_reference.row(std::stoi(read_text()));
 	expect_end_element(qn("spreadsheetdrawing", "row"));
 
 	expect_start_element(qn("spreadsheetdrawing", "rowOff"), xml::content::simple);
-	auto from_rowOff = read_text();
+	read_text();
 	expect_end_element(qn("spreadsheetdrawing", "rowOff"));
 
-	expect_end_element(qn("spreadsheetdrawing", "from"));
+	expect_end_element(qn("spreadsheetdrawing", name));
+}
 
-	expect_end_element(qn("spreadsheetdrawing", "twoCellAnchor"));
+void xlsx_consumer::read_drawings(worksheet ws)
+{
+	expect_start_element(qn("spreadsheetdrawing", "wsDr"), xml::content::complex);
+
+	while (true)
+	{
+		auto ce = expect_start_element(xml::content::complex);
+
+		if (ce == qn("spreadsheetdrawing", "wsDr"))
+			break;
+
+		auto is_one_cell = (ce == qn("spreadsheetdrawing", "oneCellAnchor"));
+		auto is_two_cell = (ce == qn("spreadsheetdrawing", "twoCellAnchor"));
+
+		if (is_one_cell || is_two_cell)
+		{
+			xlnt::sheet_drawing sheet_drawing;
+
+			read_drawing_anchor("from", sheet_drawing.from);
+			
+			if (is_two_cell)
+			{
+				cell_reference to;
+				read_drawing_anchor("to", to);
+				sheet_drawing.to = to;
+			}
+			
+			auto pic = expect_start_element(xml::content::complex);
+
+			if (pic == qn("spreadsheetdrawing", "pic"))
+			{
+				expect_start_element(qn("spreadsheetdrawing", "nvPicPr"), xml::content::complex);
+				expect_start_element(qn("spreadsheetdrawing", "cNvPr"), xml::content::simple);
+				sheet_drawing.picture_id = parser().attribute<std::size_t>("id");
+				sheet_drawing.picture_name = parser().attribute<std::string>("name");
+				expect_end_element(qn("spreadsheetdrawing", "cNvPr"));
+				skip_remaining_content(qn("spreadsheetdrawing", "nvPicPr"));
+				expect_end_element(qn("spreadsheetdrawing", "nvPicPr"));
+			}
+			
+			skip_remaining_content(pic);
+			expect_end_element(pic);
+
+			ws.sheet_drawings().add_drawing(sheet_drawing);
+		}
+
+		skip_remaining_content(ce);
+		expect_end_element(ce);
+	}
 	
 	expect_end_element(qn("spreadsheetdrawing", "wsDr"));
 }

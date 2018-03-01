@@ -35,6 +35,7 @@
 #include <xlnt/worksheet/column_properties.hpp>
 #include <xlnt/worksheet/header_footer.hpp>
 #include <xlnt/worksheet/row_properties.hpp>
+#include <xlnt/worksheet/sheet_drawings.hpp>
 
 namespace xlnt {
 
@@ -86,6 +87,7 @@ struct worksheet_impl
         views_ = other.views_;
         column_breaks_ = other.column_breaks_;
         row_breaks_ = other.row_breaks_;
+		sheet_drawings_ = other.sheet_drawings_;
     }
 
     workbook *parent_;
@@ -117,6 +119,8 @@ struct worksheet_impl
     std::vector<row_t> row_breaks_;
 
     std::unordered_map<std::string, comment> comments_;
+
+	sheet_drawings sheet_drawings_;
 };
 
 } // namespace detail

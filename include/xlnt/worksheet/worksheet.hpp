@@ -55,6 +55,7 @@ class range_reference;
 class relationship;
 class row_properties;
 class workbook;
+class sheet_drawings;
 
 struct date;
 
@@ -736,6 +737,7 @@ public:
     /// </summary>
     xlnt::conditional_format conditional_format(const range_reference &ref, const condition &when);
 
+	xlnt::sheet_drawings &sheet_drawings() const;
 private:
     friend class cell;
     friend class const_range_iterator;

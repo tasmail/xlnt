@@ -1154,4 +1154,9 @@ conditional_format worksheet::conditional_format(const range_reference &ref, con
 	return workbook().d_->stylesheet_.get().add_conditional_format_rule(d_, ref, when);
 }
 
+sheet_drawings &worksheet::sheet_drawings() const
+{
+	return d_->sheet_drawings_;
+}
+
 } // namespace xlnt

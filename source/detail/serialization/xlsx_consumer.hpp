@@ -49,6 +49,7 @@ class streaming_workbook_reader;
 class variant;
 class workbook;
 class worksheet;
+class cell_reference;
 
 namespace detail {
 
@@ -233,6 +234,8 @@ private:
 	///
 	/// </summary>
 	void read_drawings(worksheet ws);
+
+	void read_drawing_anchor(const std::string& name, cell_reference&cell_reference);
 
 	/// <summary>
 	///
