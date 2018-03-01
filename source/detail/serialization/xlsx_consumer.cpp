@@ -412,14 +412,65 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
                     new_view.show_grid_lines(is_true(parser().attribute("showGridLines")));
                 }
 
-                if (parser().attribute_present("defaultGridColor")) // default="true"
-                {
-                    new_view.default_grid_color(is_true(parser().attribute("defaultGridColor")));
-                }
+				if (parser().attribute_present("defaultGridColor")) // default="true"
+				{
+					new_view.default_grid_color(is_true(parser().attribute("defaultGridColor")));
+				}
+				
+				//if (parser().attribute_present("colorId"))
+				//{
+				//	auto color = xlnt::indexed_color(parser().attribute<std::size_t>("colorId"));
+				//	new_view.grid_color(color);
+				//}
 
-				if (parser().attribute_present("topLeftCell")) 
+				if (parser().attribute_present("topLeftCell"))
 				{
 					new_view.top_left_cell(cell_reference(parser().attribute("topLeftCell")));
+				}
+				
+				if (parser().attribute_present("rightToLeft"))
+				{
+					new_view.right_to_left(is_true(parser().attribute("rightToLeft")));
+				}
+				
+				if (parser().attribute_present("showOutlineSymbols"))
+				{
+					new_view.show_outline_symbols(is_true(parser().attribute("showOutlineSymbols")));
+				}
+
+				if (parser().attribute_present("showFormulas"))
+				{
+					new_view.show_formulas(is_true(parser().attribute("showFormulas")));
+				}
+
+				if (parser().attribute_present("showRowColHeaders"))
+				{
+					new_view.show_row_col_headers(is_true(parser().attribute("showRowColHeaders")));
+				}
+
+				if (parser().attribute_present("showRuler"))
+				{
+					new_view.show_ruler(is_true(parser().attribute("showRuler")));
+				}
+				
+				if (parser().attribute_present("showWhiteSpace"))
+				{
+					new_view.show_white_space(is_true(parser().attribute("showWhiteSpace")));
+				}
+
+				if (parser().attribute_present("tabSelected"))
+				{
+					new_view.tab_selected(is_true(parser().attribute("tabSelected")));
+				}
+
+				if (parser().attribute_present("windowProtection"))
+				{
+					new_view.window_protection(is_true(parser().attribute("windowProtection")));
+				}
+				
+				if (parser().attribute_present("showZeros"))
+				{
+					new_view.show_zeros(is_true(parser().attribute("showZeros")));
 				}
 
 				if (parser().attribute_present("view") && parser().attribute("view") != "normal")

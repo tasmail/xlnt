@@ -160,7 +160,97 @@ public:
         return show_grid_lines_;
     }
 
-    /// <summary>
+	void right_to_left(bool value)
+	{
+		right_to_left_ = value;
+	}
+
+	bool right_to_left() const
+	{
+		return right_to_left_;
+	}
+	
+	void show_outline_symbols(bool value)
+	{
+		show_outline_symbols_ = value;
+	}
+
+	bool show_outline_symbols() const
+	{
+		return show_outline_symbols_;
+	}
+
+	void show_formulas(bool value)
+	{
+		show_formulas_ = value;
+	}
+
+	bool show_formulas() const
+	{
+		return show_formulas_;
+	}
+
+	void show_row_col_headers(bool value)
+	{
+		show_row_col_headers_ = value;
+	}
+
+	bool show_row_col_headers() const
+	{
+		return show_row_col_headers_;
+	}
+
+	void show_ruler(bool value)
+	{
+		show_ruler_ = value;
+	}
+
+	bool show_ruler() const
+	{
+		return show_ruler_;
+	}
+
+	void show_white_space(bool value)
+	{
+		show_white_space_ = value;
+	}
+
+	bool show_white_space() const
+	{
+		return show_white_space_;
+	}
+
+	void show_zeros(bool value)
+	{
+		show_zeros_ = value;
+	}
+
+	bool show_zeros() const
+	{
+		return show_zeros_;
+	}
+
+	void tab_selected(bool value)
+	{
+		tab_selected_ = value;
+	}
+
+	bool tab_selected() const
+	{
+		return tab_selected_;
+	}
+
+	void window_protection(bool value)
+	{
+		window_protection_ = value;
+	}
+
+	bool window_protection() const
+	{
+		return window_protection_;
+	}
+
+	/// <summary>
     /// If is_default is true, the default grid color will be used.
     /// </summary>
     void default_grid_color(bool is_default)
@@ -249,6 +339,61 @@ private:
     /// Whether or not to use the default grid color
     /// </summary>
     bool default_grid_color_ = true;
+
+	/// <summary>
+	/// Flag indicating whether the sheet is in 'right to left' display mode. 
+	/// When in this mode, Column A is on the far right, Column B ;is one column left of Column A, and so on. 
+	/// Also, information in cells is displayed in the Right to Left format.
+	/// </summary>
+	bool right_to_left_ = false;
+
+	/// <summary>
+	/// Flag indicating whether the sheet has outline symbols visible. 
+	/// This flag shall always override SheetPr element's outlinePr child element whose attribute is named showOutlineSymbols when there is a conflict.
+	/// </summary>
+	bool show_outline_symbols_ = false;
+
+	/// <summary>
+	/// Flag indicating whether this sheet should display formulas.
+	/// </summary>
+	bool show_formulas_ = false;
+
+	/// <summary>
+	/// Flag indicating whether the sheet should display row and column headings.
+	/// </summary>
+	bool show_row_col_headers_ = true;
+
+	/// <summary>
+	/// Show the ruler in Page Layout View.
+	/// </summary>
+	bool show_ruler_ = false;
+
+	/// <summary>
+	/// Flag indicating whether page layout view shall display margins. 
+	/// False means do not display left, right, top (header), and bottom (footer) margins (even when there is data in the header or footer).
+	/// </summary>
+	bool show_white_space_ = false;
+
+	/// <summary>
+	/// Flag indicating whether the window should show 0 (zero) in cells containing zero value.
+	/// When false, cells with zero value appear blank instead of showing the number zero.
+	/// </summary>
+	bool show_zeros_ = true;
+
+	/// <summary>
+	/// Flag indicating whether this sheet is selected. 
+	/// When only 1 sheet is selected and active, this value should be in synch with the activeTab value. 
+	/// In case of a conflict, the Start Part setting wins and sets the active sheet tab.
+	///
+	/// Multiple sheets can be selected, but only one sheet shall be active at one time.
+	/// </summary>
+	bool tab_selected_ = false;
+
+	/// <summary>
+	/// Flag indicating whether the panes in the window are locked due to workbook protection. 
+	/// This is an option when the workbook structure is protected.
+	/// </summary>
+	bool window_protection_ = false;
 
     /// <summary>
     /// The type of this view

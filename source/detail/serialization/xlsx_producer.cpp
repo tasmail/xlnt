@@ -2040,10 +2040,22 @@ void xlsx_producer::write_worksheet(const relationship &rel)
         write_start_element(xmlns, "sheetViews");
         write_start_element(xmlns, "sheetView");
 
-        const auto view = ws.view();
+        const auto &view = ws.view();
 
-        write_attribute("tabSelected", write_bool(view.id() == 0));
-        write_attribute("workbookViewId", view.id());
+		// TODO: write_attribute("colorId", write_bool(view.grid_color().id()));
+		
+		write_attribute("workbookViewId", view.id());
+		write_attribute("tabSelected", write_bool(view.tab_selected()));
+		write_attribute("showGridLines", write_bool(view.show_grid_lines()));
+		write_attribute("defaultGridColor", write_bool(view.default_grid_color()));
+		write_attribute("rightToLeft", write_bool(view.right_to_left()));
+		write_attribute("showOutlineSymbols", write_bool(view.show_outline_symbols()));
+		write_attribute("showFormulas", write_bool(view.show_formulas()));
+		write_attribute("showRowColHeaders", write_bool(view.show_row_col_headers()));
+		write_attribute("showRuler", write_bool(view.show_ruler()));
+		write_attribute("showWhiteSpace", write_bool(view.show_white_space()));
+		write_attribute("windowProtection", write_bool(view.window_protection()));
+		write_attribute("showZeros", write_bool(view.show_zeros()));
 
         if (view.type() != sheet_view_type::normal)
         {
