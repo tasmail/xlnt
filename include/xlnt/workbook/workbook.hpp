@@ -561,9 +561,14 @@ public:
     /// <summary>
     /// Returns the view.
     /// </summary>
-    workbook_view view() const;
+    const workbook_view& view() const;
 
-    /// <summary>
+	/// <summary>
+	/// Returns the view.
+	/// </summary>
+	workbook_view& view();
+
+	/// <summary>
     /// Sets the view to view.
     /// </summary>
     void view(const workbook_view &view);

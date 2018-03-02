@@ -1537,10 +1537,15 @@ void xlsx_consumer::read_office_document(const std::string &content_type) // CT_
             while (in_element(qn("workbook", "bookViews")))
             {
                 expect_start_element(qn("workbook", "workbookView"), xml::content::simple);
-                skip_attributes({"activeTab", "firstSheet",
+                skip_attributes({"firstSheet",
                     "showHorizontalScroll", "showSheetTabs", "showVerticalScroll"});
 
                 workbook_view view;
+
+				if (parser().attribute_present("activeTab"))
+				{
+					view.active_tab = parser().attribute<int>("activeTab");
+				}
 
                 if (parser().attribute_present("xWindow"))
                 {

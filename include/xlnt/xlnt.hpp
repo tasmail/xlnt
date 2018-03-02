@@ -70,6 +70,7 @@
 #include <xlnt/workbook/theme.hpp>
 #include <xlnt/workbook/workbook.hpp>
 #include <xlnt/workbook/worksheet_iterator.hpp>
+#include <xlnt/workbook/workbook_view.hpp>
 
 // worksheet
 #include <xlnt/worksheet/cell_iterator.hpp>

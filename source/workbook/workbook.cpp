@@ -1396,7 +1396,7 @@ bool workbook::has_view() const
     return d_->view_.is_set();
 }
 
-workbook_view workbook::view() const
+const workbook_view& workbook::view() const
 {
     if (!d_->view_.is_set())
     {
@@ -1404,6 +1404,16 @@ workbook_view workbook::view() const
     }
 
     return d_->view_.get();
+}
+
+workbook_view& workbook::view()
+{
+	if (!d_->view_.is_set())
+	{
+		throw invalid_attribute();
+	}
+
+	return d_->view_.get();
 }
 
 void workbook::view(const workbook_view &view)
