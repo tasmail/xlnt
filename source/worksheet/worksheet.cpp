@@ -260,6 +260,9 @@ void worksheet::title(const std::string &title)
         throw invalid_sheet_title(title);
     }
 
+	if (title == d_->title_)
+		return;
+
     workbook().d_->sheet_title_rel_id_map_[title] = workbook().d_->sheet_title_rel_id_map_[d_->title_];
     workbook().d_->sheet_title_rel_id_map_.erase(d_->title_);
     d_->title_ = title;

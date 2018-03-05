@@ -480,6 +480,12 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
                         : sheet_view_type::page_layout);
                 }
 
+				if (parser().attribute_present("zoomScale"))
+				{
+					new_view.zoom_scale(parser().attribute<uint32_t>("zoomScale"));
+				}
+
+
                 skip_attributes({ "windowProtection", "showFormulas", "showRowColHeaders", "showZeros", "rightToLeft",
                     "tabSelected", "showRuler", "showOutlineSymbols", "showWhiteSpace", "view", "topLeftCell",
                     "colorId", "zoomScale", "zoomScaleNormal", "zoomScaleSheetLayoutView", "zoomScalePageLayoutView" });

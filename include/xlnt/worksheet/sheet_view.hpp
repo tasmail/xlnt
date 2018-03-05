@@ -144,7 +144,23 @@ public:
         return selections_.at(index);
     }
 
-    /// <summary>
+	/// <summary>
+	/// Set sheet view scale
+	/// </summary>
+	void zoom_scale(uint32_t val)
+	{
+		zoom_scale_ = val;
+	}
+
+	/// <summary>
+	/// Return sheet view scale
+	/// </summary>
+	uint32_t zoom_scale() const
+	{
+		return zoom_scale_;
+	}
+
+	/// <summary>
     /// If show is true, grid lines will be shown for sheets using this view.
     /// </summary>
     void show_grid_lines(bool show)
@@ -329,6 +345,11 @@ private:
     /// The id
     /// </summary>
     std::size_t id_ = 0;
+
+	/// <summary>
+	/// The sheet view scale
+	/// </summary>
+	uint32_t zoom_scale_ = 100;
 
     /// <summary>
     /// Whether or not to show grid lines

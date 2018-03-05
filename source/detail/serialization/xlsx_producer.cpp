@@ -2056,6 +2056,8 @@ void xlsx_producer::write_worksheet(const relationship &rel)
 		write_attribute("showWhiteSpace", write_bool(view.show_white_space()));
 		write_attribute("windowProtection", write_bool(view.window_protection()));
 		write_attribute("showZeros", write_bool(view.show_zeros()));
+		write_attribute("zoomScale", view.zoom_scale());
+		write_attribute("zoomScaleNormal", view.zoom_scale());
 
         if (view.type() != sheet_view_type::normal)
         {
