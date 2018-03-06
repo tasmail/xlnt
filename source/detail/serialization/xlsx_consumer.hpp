@@ -230,10 +230,12 @@ private:
 	/// </summary>
 	void read_vml_drawings(worksheet ws);
 
+	using map_strings=std::map<std::string, std::string>;
+
 	/// <summary>
 	///
 	/// </summary>
-	void read_drawings(worksheet ws);
+	void read_drawings(worksheet ws, map_strings relation_paths);
 
 	void read_drawing_anchor(const std::string& name, cell_reference&cell_reference);
 

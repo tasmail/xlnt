@@ -1128,6 +1128,14 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
 	{
 		auto drawings_part = manifest.canonicalize({ workbook_rel, sheet_rel,
 			manifest.relationship(sheet_path, xlnt::relationship_type::drawings) });
+		
+		map_strings relation_paths;
+		for (const auto &package_rel : read_relationships(drawings_part))
+		{
+			auto image_path = manifest.canonicalize({ workbook_rel, sheet_rel, package_rel });
+			relation_paths[package_rel.id()] = image_path.string();
+			read_image(image_path);
+		}
 
 		auto drawings_part_streambuf = archive_->open(drawings_part);
 		std::istream drawings_part_stream(drawings_part_streambuf.get());
@@ -1135,12 +1143,7 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
 		xml::parser parser(drawings_part_stream, drawings_part.string(), receive);
 		parser_ = &parser;
 
-		read_drawings(ws);
-
-		for (const auto &package_rel : read_relationships(drawings_part))
-		{			
-			read_image(package_rel.target().path().relative_to(drawings_part.parent()));
-		}
+		read_drawings(ws, relation_paths);
 	}
 
     return ws;
@@ -2488,7 +2491,7 @@ void xlsx_consumer::read_drawing_anchor(const std::string& name, cell_reference&
 	expect_end_element(qn("spreadsheetdrawing", name));
 }
 
-void xlsx_consumer::read_drawings(worksheet ws)
+void xlsx_consumer::read_drawings(worksheet ws, map_strings relation_paths)
 {
 	expect_start_element(qn("spreadsheetdrawing", "wsDr"), xml::content::complex);
 
@@ -2532,7 +2535,14 @@ void xlsx_consumer::read_drawings(worksheet ws)
 				{
 					expect_start_element(qn("drawingml", "blip"), xml::content::simple);
 					auto ns = constants::namespaces().find("r");
-					sheet_drawing.blip_fill_embed = parser().attribute<std::string>(xml::qname(ns->second, "embed", "r"));
+					auto rel_id = parser().attribute<std::string>(xml::qname(ns->second, "embed", "r"));
+					auto it_rel = relation_paths.find(rel_id);
+					
+					if (relation_paths.end() != it_rel)
+						sheet_drawing.picture_path = it_rel->second;
+					else
+						sheet_drawing.picture_path = rel_id;
+
 					expect_end_element(qn("drawingml", "blip"));
 				}
 
