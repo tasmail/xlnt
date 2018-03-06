@@ -38,6 +38,7 @@ public:
 	optional<cell_reference> to;
 	optional<int> picture_id;
 	optional<std::string> picture_name;
+	optional<std::string> blip_fill_embed;
 };
 
 } // namespace xlnt

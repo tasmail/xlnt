@@ -1136,6 +1136,11 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
 		parser_ = &parser;
 
 		read_drawings(ws);
+
+		for (const auto &package_rel : read_relationships(drawings_part))
+		{			
+			read_image(package_rel.target().path().relative_to(drawings_part.parent()));
+		}
 	}
 
     return ws;
@@ -2516,11 +2521,23 @@ void xlsx_consumer::read_drawings(worksheet ws)
 			{
 				expect_start_element(qn("spreadsheetdrawing", "nvPicPr"), xml::content::complex);
 				expect_start_element(qn("spreadsheetdrawing", "cNvPr"), xml::content::simple);
-				sheet_drawing.picture_id = parser().attribute<std::size_t>("id");
+				sheet_drawing.picture_id = parser().attribute<int>("id");
 				sheet_drawing.picture_name = parser().attribute<std::string>("name");
 				expect_end_element(qn("spreadsheetdrawing", "cNvPr"));
 				skip_remaining_content(qn("spreadsheetdrawing", "nvPicPr"));
 				expect_end_element(qn("spreadsheetdrawing", "nvPicPr"));
+
+				auto blipFill = expect_start_element(xml::content::complex);
+				if (blipFill == qn("spreadsheetdrawing", "blipFill"))
+				{
+					expect_start_element(qn("drawingml", "blip"), xml::content::simple);
+					auto ns = constants::namespaces().find("r");
+					sheet_drawing.blip_fill_embed = parser().attribute<std::string>(xml::qname(ns->second, "embed", "r"));
+					expect_end_element(qn("drawingml", "blip"));
+				}
+
+				skip_remaining_content(blipFill);
+				expect_end_element(blipFill);
 			}
 			
 			skip_remaining_content(pic);
@@ -2532,8 +2549,6 @@ void xlsx_consumer::read_drawings(worksheet ws)
 		skip_remaining_content(ce);
 		expect_end_element(ce);
 	}
-	
-	expect_end_element(qn("spreadsheetdrawing", "wsDr"));
 }
 
 
