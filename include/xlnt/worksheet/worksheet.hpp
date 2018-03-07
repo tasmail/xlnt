@@ -36,6 +36,7 @@
 #include <xlnt/worksheet/page_margins.hpp>
 #include <xlnt/worksheet/page_setup.hpp>
 #include <xlnt/worksheet/sheet_view.hpp>
+#include <xlnt/worksheet/sheet_drawings.hpp>
 
 namespace xlnt {
 
@@ -55,7 +56,6 @@ class range_reference;
 class relationship;
 class row_properties;
 class workbook;
-class sheet_drawings;
 
 struct date;
 

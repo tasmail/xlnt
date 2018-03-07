@@ -90,3 +90,4 @@
 #include <xlnt/worksheet/sheet_protection.hpp>
 #include <xlnt/worksheet/sheet_view.hpp>
 #include <xlnt/worksheet/worksheet.hpp>
+#include <xlnt/worksheet/sheet_drawing.hpp>
