@@ -94,7 +94,12 @@ class XLNT_API workbook
 {
 	std::unique_ptr<stylesheetview> stylesheetview_;
 public:
-    /// <summary>
+	/// <summary>
+	/// typedef for the iterator used for iterating through image bytes
+	/// </summary>
+	using vector_bytes = std::vector<std::uint8_t>;	
+
+	/// <summary>
     /// typedef for the iterator used for iterating through this workbook
     /// (non-const) in a range-based for loop.
     /// </summary>
@@ -432,13 +437,13 @@ public:
     /// Serializes the workbook into an XLSX file and saves the bytes into
     /// byte vector data.
     /// </summary>
-    void save(std::vector<std::uint8_t> &data) const;
+    void save(vector_bytes &data) const;
 
     /// <summary>
     /// Serializes the workbook into an XLSX file encrypted with the given password
     /// and saves the bytes into byte vector data.
     /// </summary>
-    void save(std::vector<std::uint8_t> &data, const std::string &password) const;
+    void save(vector_bytes &data, const std::string &password) const;
 
     /// <summary>
     /// Serializes the workbook into an XLSX file and saves the data into a file
@@ -493,13 +498,13 @@ public:
     /// Interprets byte vector data as an XLSX file and sets the content of this
     /// workbook to match that file.
     /// </summary>
-    void load(const std::vector<std::uint8_t> &data);
+    void load(const vector_bytes &data);
 
     /// <summary>
     /// Interprets byte vector data as an XLSX file encrypted with the
     /// given password and sets the content of this workbook to match that file.
     /// </summary>
-    void load(const std::vector<std::uint8_t> &data, const std::string &password);
+    void load(const vector_bytes &data, const std::string &password);
 
     /// <summary>
     /// Interprets file with the given filename as an XLSX file and sets
@@ -751,13 +756,23 @@ public:
     /// Sets the workbook's thumbnail to the given vector of bytes, thumbnail,
     /// with the given extension (e.g. jpg) and content_type (e.g. image/jpeg).
     /// </summary>
-    void thumbnail(const std::vector<std::uint8_t> &thumbnail,
+    void thumbnail(const vector_bytes &thumbnail,
         const std::string &extension, const std::string &content_type);
 
     /// <summary>
     /// Returns a vector of bytes representing the workbook's thumbnail.
     /// </summary>
-    const std::vector<std::uint8_t> &thumbnail() const;
+    const vector_bytes &thumbnail() const;
+
+	/// <summary>
+	/// Checks if an image data resent at the specified path
+	/// </summary>
+	bool has_image(const std::string& path) const;
+
+	/// <summary>
+	/// Returns a vector of bytes representing an image at the specified path
+	/// </summary>
+	const vector_bytes &get_image(const std::string& path) const;
 
     // Calculation properties
 
