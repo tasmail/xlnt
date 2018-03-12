@@ -811,7 +811,7 @@ void workbook::load(std::istream &stream)
     consumer.read(stream);
 }
 
-void workbook::load(const std::vector<std::uint8_t> &data)
+void workbook::load(const vector_bytes &data)
 {
     if (data.size() < 22) // the shortest ZIP file is 22 bytes
     {
@@ -859,7 +859,7 @@ void workbook::load(const path &filename, const std::string &password)
     return load(file_stream, password);
 }
 
-void workbook::load(const std::vector<std::uint8_t> &data, const std::string &password)
+void workbook::load(const vector_bytes &data, const std::string &password)
 {
     if (data.size() < 22) // the shortest ZIP file is 22 bytes
     {
@@ -878,14 +878,14 @@ void workbook::load(std::istream &stream, const std::string &password)
     consumer.read(stream, password);
 }
 
-void workbook::save(std::vector<std::uint8_t> &data) const
+void workbook::save(vector_bytes &data) const
 {
     xlnt::detail::vector_ostreambuf data_buffer(data);
     std::ostream data_stream(&data_buffer);
     save(data_stream);
 }
 
-void workbook::save(std::vector<std::uint8_t> &data, const std::string &password) const
+void workbook::save(vector_bytes &data, const std::string &password) const
 {
     xlnt::detail::vector_ostreambuf data_buffer(data);
     std::ostream data_stream(&data_buffer);
@@ -1316,7 +1316,7 @@ bool workbook::contains(const std::string &sheet_title) const
     return false;
 }
 
-void workbook::thumbnail(const std::vector<std::uint8_t> &thumbnail,
+void workbook::thumbnail(const vector_bytes &thumbnail,
     const std::string &extension, const std::string &content_type)
 {
     if (!d_->manifest_.has_relationship(path("/"), relationship_type::thumbnail))
@@ -1330,10 +1330,20 @@ void workbook::thumbnail(const std::vector<std::uint8_t> &thumbnail,
     d_->images_[thumbnail_rel.target().to_string()] = thumbnail;
 }
 
-const std::vector<std::uint8_t> &workbook::thumbnail() const
+const workbook::vector_bytes &workbook::thumbnail() const
 {
     auto thumbnail_rel = d_->manifest_.relationship(path("/"), relationship_type::thumbnail);
     return d_->images_.at(thumbnail_rel.target().to_string());
+}
+
+bool workbook::has_image(const std::string& path) const
+{
+	auto it = d_->images_.find(path);
+	return (d_->images_.end() != it);
+}
+const workbook::vector_bytes &workbook::get_image(const std::string& path) const
+{
+	return d_->images_.at(path);
 }
 
 style workbook::create_style(const std::string &name)
