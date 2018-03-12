@@ -343,6 +343,59 @@ std::string to_string(pane_state state)
     default_case("frozen");
 }
 
+std::string to_string(orientation val)
+{
+	switch (val)
+	{
+	case orientation::landscape: return "landscape";
+	case orientation::portrait: return "portrait";
+	}
+
+	default_case("portrait");
+}
+
+std::string to_string(paper_size val)
+{
+	std::stringstream ss;
+	ss << (int)val;
+	return ss.str();
+}
+
+std::string to_string(page_orders val)
+{
+	switch (val)
+	{
+	case page_orders::downThenOver: return "downThenOver";
+	case page_orders::overThenDown: return "overThenDown";
+	}
+
+	default_case("downThenOver");
+}
+
+std::string to_string(cell_comments val)
+{
+	switch (val)
+	{
+	case cell_comments::at_end: return "atEnd";
+	case cell_comments::as_displayed: return "asDisplayed";
+	}
+
+	default_case("none");
+}
+
+std::string to_string(cell_errors val)
+{
+	switch (val)
+	{
+	case cell_errors::blank: return "blank";
+	case cell_errors::dash: return "dash";
+	case cell_errors::NA: return "NA";
+	}
+
+	default_case("asAtScreen");
+}
+
+
 bool iequals(const std::string& str1, const std::string& str2)
 {
 	return std::equal(str1.begin(), str1.end(), str2.begin(), str2.end(), iequal());

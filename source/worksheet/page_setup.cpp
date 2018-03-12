@@ -139,4 +139,96 @@ double page_setup::scale() const
     return scale_;
 }
 
+void page_setup::black_and_white(bool val)
+{
+	black_and_white_ = val;
+}
+
+bool page_setup::black_and_white() const
+{
+	return black_and_white_;
+}
+
+void page_setup::draft(bool val)
+{
+	draft_ = val;
+}
+
+bool page_setup::draft() const
+{
+	return draft_;
+}
+
+void page_setup::grid_lines(bool val)
+{
+	grid_lines_ = val;
+}
+
+bool page_setup::grid_lines(void)
+{
+	return grid_lines_;
+}
+
+void page_setup::headings(bool val)
+{
+	headings_ = val;
+}
+
+bool page_setup::headings()
+{
+	return headings_;
+}
+
+bool page_setup::has_first_page_number()
+{
+	return first_page_number_.is_set();
+}
+
+void page_setup::first_page_number(size_t val)
+{
+	first_page_number_ = val;
+}
+
+size_t page_setup::first_page_number()
+{
+	if (!first_page_number_.is_set())
+	{
+		throw invalid_attribute();
+	}
+
+	return first_page_number_.get();
+}
+
+
+void page_setup::page_order(page_orders val)
+{
+	page_order_ = val;
+}
+
+page_orders page_setup::page_order()
+{
+	return page_order_;
+}
+
+void page_setup::cell_comment(cell_comments val)
+{
+	cell_comment_ = val;
+}
+
+cell_comments page_setup::cell_comment()
+{
+	return cell_comment_;
+}
+
+void page_setup::cell_error(cell_errors val)
+{
+	cell_error_ = val;
+}
+
+cell_errors page_setup::cell_error()
+{
+	return cell_error_;
+}
+
+
 } // namespace xlnt

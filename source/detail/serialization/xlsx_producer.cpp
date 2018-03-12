@@ -2479,12 +2479,22 @@ void xlsx_producer::write_worksheet(const relationship &rel)
         write_end_element(xmlns, "hyperlinks");
     }
 
-    if (ws.has_page_setup())
+    if (ws.has_page_setup() &&
+		(ws.page_setup().horizontal_centered() ||
+		ws.page_setup().vertical_centered() ||
+		ws.page_setup().grid_lines() ||
+		ws.page_setup().headings()))
     {
         write_start_element(xmlns, "printOptions");
-        write_attribute("horizontalCentered", write_bool(ws.page_setup().horizontal_centered()));
-        write_attribute("verticalCentered", write_bool(ws.page_setup().vertical_centered()));
-        write_end_element(xmlns, "printOptions");
+		if (ws.page_setup().horizontal_centered())
+			write_attribute("horizontalCentered", write_bool(ws.page_setup().horizontal_centered()));
+		if (ws.page_setup().vertical_centered())
+			write_attribute("verticalCentered", write_bool(ws.page_setup().vertical_centered()));
+		if (ws.page_setup().grid_lines())
+			write_attribute("gridLines", write_bool(ws.page_setup().grid_lines()));
+		if (ws.page_setup().headings())
+			write_attribute("headings", write_bool(ws.page_setup().headings()));
+		write_end_element(xmlns, "printOptions");
     }
 
     if (ws.has_page_margins())
@@ -2528,9 +2538,24 @@ void xlsx_producer::write_worksheet(const relationship &rel)
         write_attribute(
             "orientation", ws.page_setup().orientation() == xlnt::orientation::landscape ? "landscape" : "portrait");
         write_attribute("paperSize", static_cast<std::size_t>(ws.page_setup().paper_size()));
-        write_attribute("fitToHeight", write_bool(ws.page_setup().fit_to_height()));
-        write_attribute("fitToWidth", write_bool(ws.page_setup().fit_to_width()));
-        write_end_element(xmlns, "pageSetup");
+		if (ws.page_setup().fit_to_height())
+			write_attribute("fitToHeight", write_bool(ws.page_setup().fit_to_height()));
+		if (ws.page_setup().fit_to_width())
+			write_attribute("fitToWidth", write_bool(ws.page_setup().fit_to_width()));
+		if (ws.page_setup().black_and_white())
+			write_attribute("blackAndWhite", write_bool(true)); //skip default values 
+		if (ws.page_setup().draft())
+			write_attribute("draft", write_bool(true)); //skip default values 
+		if (ws.page_setup().cell_comment() != xlnt::cell_comments::none)
+			write_attribute("cellComments", ws.page_setup().cell_comment()); //skip default values 
+		if (ws.page_setup().page_order() != xlnt::page_orders::downThenOver)
+			write_attribute("pageOrder", ws.page_setup().page_order()); //skip default values 
+		if (ws.page_setup().cell_error() != xlnt::cell_errors::as_at_screen)
+			write_attribute("errors", ws.page_setup().cell_error()); //skip default values 
+		if (ws.page_setup().has_first_page_number())
+			write_attribute("firstPageNumber", ws.page_setup().first_page_number()); //skip default values 
+
+		write_end_element(xmlns, "pageSetup");
     }
 
     if (ws.has_header_footer())

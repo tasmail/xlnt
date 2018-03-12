@@ -892,7 +892,14 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
         }
         else if (current_worksheet_element == qn("spreadsheetml", "printOptions")) // CT_PrintOptions 0-1
         {
-            skip_remaining_content(current_worksheet_element);
+			page_setup ps = ws.page_setup();
+
+			ps.horizontal_centered(is_true(parser().attribute("horizontalCentered")));
+			ps.vertical_centered(is_true(parser().attribute("verticalCentered")));
+			ps.grid_lines(is_true(parser().attribute("gridLines")));
+			ps.headings(is_true(parser().attribute("headings")));
+
+			ws.page_setup(ps);
         }
         else if (current_worksheet_element == qn("spreadsheetml", "pageMargins")) // CT_PageMargins 0-1
         {
@@ -909,8 +916,31 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
         }
         else if (current_worksheet_element == qn("spreadsheetml", "pageSetup")) // CT_PageSetup 0-1
         {
-            skip_remaining_content(current_worksheet_element);
-        }
+			page_setup ps = ws.page_setup();
+
+			if (parser().attribute_present("orientation"))
+				ps.orientation(parser().attribute<xlnt::orientation>("orientation"));
+			if (parser().attribute_present("paperSize"))
+				ps.paper_size(parser().attribute<xlnt::paper_size>("paperSize"));
+			if (parser().attribute_present("fitToHeight"))
+				ps.fit_to_height(is_true(parser().attribute("fitToHeight")));
+			if (parser().attribute_present("fitToWidth"))
+				ps.fit_to_width(is_true(parser().attribute("fitToWidth")));
+			if (parser().attribute_present("blackAndWhite"))
+				ps.black_and_white(is_true(parser().attribute("blackAndWhite")));
+			if (parser().attribute_present("draft"))
+				ps.draft(is_true(parser().attribute("draft")));
+			if (parser().attribute_present("pageOrder"))
+				ps.page_order(parser().attribute<xlnt::page_orders>("pageOrder"));
+			if (parser().attribute_present("cellComments"))
+				ps.cell_comment(parser().attribute<xlnt::cell_comments>("cellComments"));
+			if (parser().attribute_present("errors"))
+				ps.cell_error(parser().attribute<xlnt::cell_errors>("errors"));
+			if (parser().attribute_present("firstPageNumber"))
+				ps.first_page_number(parser().attribute<size_t>("firstPageNumber"));
+
+			ws.page_setup(ps);
+		}
         else if (current_worksheet_element == qn("spreadsheetml", "headerFooter")) // CT_HeaderFooter 0-1
         {
             header_footer hf;

@@ -25,6 +25,7 @@
 #pragma once
 
 #include <xlnt/xlnt_config.hpp>
+#include <xlnt/utils/optional.hpp>
 
 namespace xlnt {
 
@@ -74,6 +75,36 @@ enum class XLNT_API sheet_state
     visible,
     hidden,
     very_hidden
+};
+
+/// <summary>
+/// The page order when worksheet is printed.
+/// </summary>
+enum class XLNT_API page_orders
+{
+	downThenOver /*default*/,
+	overThenDown,
+};
+
+/// <summary>
+/// Where the cell comments is printed.
+/// </summary>
+enum class XLNT_API cell_comments
+{
+	none /*default*/,
+	at_end,
+	as_displayed
+};
+
+/// <summary>
+/// How errors is printed.
+/// </summary>
+enum class XLNT_API cell_errors
+{
+	as_at_screen /*default*/,
+	dash,
+	blank,
+	NA
 };
 
 /// <summary>
@@ -189,6 +220,91 @@ public:
     /// </summary>
     double scale() const;
 
+	/// <summary>
+	/// Set monochrome mode
+	/// </summary>
+	void black_and_white(bool);
+
+	/// <summary>
+	/// Return monochrome mode
+	/// </summary>
+	bool black_and_white() const;
+
+	/// <summary>
+	/// Set draft mode
+	/// </summary>
+	void draft(bool);
+
+	/// <summary>
+	/// Return draft mode
+	/// </summary>
+	bool draft() const;
+
+	/// <summary>
+	/// Set show grid lines
+	/// </summary>
+	void grid_lines(bool);
+
+	/// <summary>
+	/// Return show grid lines
+	/// </summary>
+	bool grid_lines(void);
+
+	/// <summary>
+	/// Set show row and column headings
+	/// </summary>
+	void headings(bool);
+
+	/// <summary>
+	/// Return show row and column headings
+	/// </summary>
+	bool headings();
+
+	/// <summary>
+	/// Set page order when worksheet is printed.
+	/// </summary>
+	void page_order(page_orders);
+
+	/// <summary>
+	/// Return page order when worksheet is printed.
+	/// </summary>
+	page_orders page_order();
+
+	/// <summary>
+	/// Set where the cell comments is printed.
+	/// </summary>
+	void cell_comment(cell_comments);
+
+	/// <summary>
+	/// Return where the cell comments is printed.
+	/// </summary>
+	cell_comments cell_comment();
+
+	/// <summary>
+	/// Set how errors is printed.
+	/// </summary>
+	void cell_error(cell_errors);
+
+	/// <summary>
+	/// Return how errors is printed.
+	/// </summary>
+	cell_errors cell_error();
+
+	/// <summary>
+	/// If has starting page number return true
+	/// </summary>
+	bool has_first_page_number();
+
+	/// <summary>
+	/// Set starting page number
+	/// </summary>
+	void first_page_number(size_t);
+
+	/// <summary>
+	/// Return starting page number
+	/// </summary>
+	size_t first_page_number();
+
 private:
     /// <summary>
     /// The break
@@ -239,6 +355,46 @@ private:
     /// The amount to scale the worksheet
     /// </summary>
     double scale_;
+
+	/// <summary>
+	/// Is monochrome or not
+	/// </summary>
+	bool black_and_white_;
+
+	/// <summary>
+	/// Is draft mode
+	/// </summary>
+	bool draft_;
+
+	/// <summary>
+	/// Show grid lines
+	/// </summary>
+	bool grid_lines_;
+
+	/// <summary>
+	/// Show row and column headings
+	/// </summary>
+	bool headings_;
+
+	/// <summary>
+	/// Start with page number
+	/// </summary>
+	optional<size_t> first_page_number_;
+
+	/// <summary>
+	/// The page order when worksheet is printed.
+	/// </summary>
+	page_orders page_order_;
+
+	/// <summary>
+	/// Where the cell comments is printed.
+	/// </summary>
+	cell_comments cell_comment_;
+
+	/// <summary>
+	/// How errors is printed.
+	/// </summary>
+	cell_errors cell_error_;
 };
 
 } // namespace xlnt

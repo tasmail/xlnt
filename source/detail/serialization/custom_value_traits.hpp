@@ -38,6 +38,7 @@
 #include <xlnt/utils/variant.hpp>
 #include <xlnt/worksheet/pane.hpp>
 #include <xlnt/workbook/metadata_property.hpp>
+#include <xlnt/worksheet/page_setup.hpp>
 
 namespace xlnt {
 namespace detail {
@@ -75,6 +76,16 @@ std::string to_string(pane_corner corner);
 std::string to_string(target_mode mode);
 
 std::string to_string(pane_state state);
+
+std::string to_string(orientation val);
+
+std::string to_string(paper_size val);
+
+std::string to_string(page_orders val);
+
+std::string to_string(cell_comments val);
+
+std::string to_string(cell_errors val);
 
 template<typename T>
 static T from_string(const std::string &string_value);
@@ -374,6 +385,50 @@ pane_corner from_string(const std::string &string)
     default_case(pane_corner::bottom_left);
 }
 
+template<>
+orientation from_string(const std::string &string)
+{
+	if (iequals(string, "landscape")) return orientation::landscape;
+	else if (iequals(string, "portrait")) return orientation::portrait;
+
+	default_case(orientation::landscape);
+}
+
+template<>
+paper_size from_string(const std::string &string)
+{
+	return (paper_size)atoi(string.c_str());
+}
+
+template<>
+page_orders from_string(const std::string &string)
+{
+	if (iequals(string, "downThenOver")) return page_orders::downThenOver;
+	else if (iequals(string, "overThenDown")) return page_orders::overThenDown;
+
+	default_case(page_orders::downThenOver);
+}
+
+template<>
+cell_comments from_string(const std::string &string)
+{
+	if (iequals(string, "atEnd")) return cell_comments::at_end;
+	else if (iequals(string, "asDisplayed")) return cell_comments::as_displayed;
+
+	default_case(cell_comments::none);
+}
+
+template<>
+cell_errors from_string(const std::string &string)
+{
+	if (iequals(string, "asAtScreen")) return cell_errors::as_at_screen;
+	else if (iequals(string, "dash")) return cell_errors::dash;
+	else if (iequals(string, "blank")) return cell_errors::blank;
+	else if (iequals(string, "NA")) return cell_errors::NA;
+
+	default_case(cell_errors::as_at_screen);
+}
+
 } // namespace detail
 } // namespace xlnt
 
@@ -560,6 +615,76 @@ struct value_traits<xlnt::extended_property>
     {
         return xlnt::detail::to_string(corner);
     }
+};
+
+template <>
+struct value_traits<xlnt::orientation>
+{
+	static xlnt::orientation parse(std::string string, const parser &)
+	{
+		return xlnt::detail::from_string<xlnt::orientation>(string);
+	}
+
+	static std::string serialize(xlnt::orientation corner, const serializer &)
+	{
+		return xlnt::detail::to_string(corner);
+	}
+};
+
+template <>
+struct value_traits<xlnt::paper_size>
+{
+	static xlnt::paper_size parse(std::string string, const parser &)
+	{
+		return xlnt::detail::from_string<xlnt::paper_size>(string);
+	}
+
+	static std::string serialize(xlnt::paper_size corner, const serializer &)
+	{
+		return xlnt::detail::to_string(corner);
+	}
+};
+
+template <>
+struct value_traits<xlnt::page_orders>
+{
+	static xlnt::page_orders parse(std::string string, const parser &)
+	{
+		return xlnt::detail::from_string<xlnt::page_orders>(string);
+	}
+
+	static std::string serialize(xlnt::page_orders corner, const serializer &)
+	{
+		return xlnt::detail::to_string(corner);
+	}
+};
+
+template <>
+struct value_traits<xlnt::cell_comments>
+{
+	static xlnt::cell_comments parse(std::string string, const parser &)
+	{
+		return xlnt::detail::from_string<xlnt::cell_comments>(string);
+	}
+
+	static std::string serialize(xlnt::cell_comments corner, const serializer &)
+	{
+		return xlnt::detail::to_string(corner);
+	}
+};
+
+template <>
+struct value_traits<xlnt::cell_errors>
+{
+	static xlnt::cell_errors parse(std::string string, const parser &)
+	{
+		return xlnt::detail::from_string<xlnt::cell_errors>(string);
+	}
+
+	static std::string serialize(xlnt::cell_errors corner, const serializer &)
+	{
+		return xlnt::detail::to_string(corner);
+	}
 };
 
 } // namespace xml
