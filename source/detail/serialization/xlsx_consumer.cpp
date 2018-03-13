@@ -2498,8 +2498,15 @@ void xlsx_consumer::read_volatile_dependencies()
 }
 
 
-void xlsx_consumer::read_drawing_anchor(const std::string& name, cell_reference&cell_reference)
+void xlsx_consumer::read_drawing_anchor(
+	const std::string& name, 
+	cell_reference&cell_reference,
+	int& colOffset,
+	int& rowOffset)
 {
+	colOffset = 0;
+	rowOffset = 0;
+
 	expect_start_element(qn("spreadsheetdrawing", name), xml::content::complex);
 
 	expect_start_element(qn("spreadsheetdrawing", "col"), xml::content::simple);
@@ -2507,7 +2514,7 @@ void xlsx_consumer::read_drawing_anchor(const std::string& name, cell_reference&
 	expect_end_element(qn("spreadsheetdrawing", "col"));
 
 	expect_start_element(qn("spreadsheetdrawing", "colOff"), xml::content::simple);
-	read_text();
+	colOffset = std::stoi(read_text());
 	expect_end_element(qn("spreadsheetdrawing", "colOff"));
 
 	expect_start_element(qn("spreadsheetdrawing", "row"), xml::content::simple);
@@ -2515,7 +2522,7 @@ void xlsx_consumer::read_drawing_anchor(const std::string& name, cell_reference&
 	expect_end_element(qn("spreadsheetdrawing", "row"));
 
 	expect_start_element(qn("spreadsheetdrawing", "rowOff"), xml::content::simple);
-	read_text();
+	rowOffset = std::stoi(read_text());
 	expect_end_element(qn("spreadsheetdrawing", "rowOff"));
 
 	expect_end_element(qn("spreadsheetdrawing", name));
@@ -2539,13 +2546,25 @@ void xlsx_consumer::read_drawings(worksheet ws, map_strings relation_paths)
 		{
 			xlnt::sheet_drawing sheet_drawing;
 
-			read_drawing_anchor("from", sheet_drawing.from);
+			read_drawing_anchor(
+				"from", 
+				sheet_drawing.from,
+				sheet_drawing.from_col_offset,
+				sheet_drawing.from_row_offset
+				);
 			
 			if (is_two_cell)
 			{
 				cell_reference to;
-				read_drawing_anchor("to", to);
+				int to_col_offset, to_row_offset;
+				read_drawing_anchor(
+					"to", 
+					to,
+					to_col_offset, 
+					to_row_offset);
 				sheet_drawing.to = to;
+				sheet_drawing.to_col_offset = to_col_offset;
+				sheet_drawing.to_row_offset = to_row_offset;
 			}
 			
 			auto pic = expect_start_element(xml::content::complex);

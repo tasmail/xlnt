@@ -237,7 +237,11 @@ private:
 	/// </summary>
 	void read_drawings(worksheet ws, map_strings relation_paths);
 
-	void read_drawing_anchor(const std::string& name, cell_reference&cell_reference);
+	void read_drawing_anchor(
+		const std::string& name,
+		cell_reference&cell_reference,
+		int& colOffset,
+		int& rowOffset);
 
 	/// <summary>
 	///

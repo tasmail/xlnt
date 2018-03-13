@@ -35,7 +35,11 @@ class XLNT_API sheet_drawing
 {
 public:
 	cell_reference from;
+	int from_col_offset;
+	int from_row_offset;
 	optional<cell_reference> to;
+	optional<int> to_col_offset;
+	optional<int> to_row_offset;
 	optional<int> picture_id;
 	optional<std::string> picture_name;
 	optional<std::string> picture_path;
