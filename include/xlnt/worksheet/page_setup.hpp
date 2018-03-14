@@ -171,22 +171,22 @@ public:
     /// <summary>
     /// Returns true if the height of this worksheet should be scaled to fit on a printed page.
     /// </summary>
-    bool fit_to_height() const;
+	size_t fit_to_height() const;
 
     /// <summary>
     /// Sets whether the height of the page should be scaled to fit on a printed page.
     /// </summary>
-    void fit_to_height(bool fit_to_height);
+    void fit_to_height(size_t fit_to_height);
 
     /// <summary>
     /// Returns true if the width of this worksheet should be scaled to fit on a printed page.
     /// </summary>
-    bool fit_to_width() const;
+	size_t fit_to_width() const;
 
     /// <summary>
     /// Sets whether the width of the page should be scaled to fit on a printed page.
     /// </summary>
-    void fit_to_width(bool fit_to_width);
+    void fit_to_width(size_t fit_to_width);
 
     /// <summary>
     /// Sets whether the worksheet should be centered horizontall on the page if it takes
@@ -334,12 +334,12 @@ private:
     /// <summary>
     /// Whether or not to fit to height
     /// </summary>
-    bool fit_to_height_;
+	size_t fit_to_height_;
 
     /// <summary>
     /// Whether or not to fit to width
     /// </summary>
-    bool fit_to_width_;
+    size_t fit_to_width_;
 
     /// <summary>
     /// Whether or not to center the content horizontally

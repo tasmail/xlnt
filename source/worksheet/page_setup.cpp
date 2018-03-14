@@ -31,11 +31,18 @@ page_setup::page_setup()
       paper_size_(xlnt::paper_size::letter),
       orientation_(xlnt::orientation::portrait),
       fit_to_page_(false),
-      fit_to_height_(false),
-      fit_to_width_(false),
+      fit_to_height_(1),
+      fit_to_width_(1),
       horizontal_centered_(false),
       vertical_centered_(false),
-      scale_(1)
+      scale_(1),
+	  cell_comment_(xlnt::cell_comments::none),
+	  cell_error_(xlnt::cell_errors::as_at_screen),
+	  page_order_(xlnt::page_orders::downThenOver),
+	  headings_(false),
+	  grid_lines_(true),
+	  draft_(false),
+	  black_and_white_(false)
 {
 }
 
@@ -89,22 +96,22 @@ void page_setup::fit_to_page(bool fit_to_page)
     fit_to_page_ = fit_to_page;
 }
 
-bool page_setup::fit_to_height() const
+size_t page_setup::fit_to_height() const
 {
     return fit_to_height_;
 }
 
-void page_setup::fit_to_height(bool fit_to_height)
+void page_setup::fit_to_height(size_t fit_to_height)
 {
     fit_to_height_ = fit_to_height;
 }
 
-bool page_setup::fit_to_width() const
+size_t page_setup::fit_to_width() const
 {
     return fit_to_width_;
 }
 
-void page_setup::fit_to_width(bool fit_to_width)
+void page_setup::fit_to_width(size_t fit_to_width)
 {
     fit_to_width_ = fit_to_width;
 }

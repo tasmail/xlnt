@@ -2538,10 +2538,12 @@ void xlsx_producer::write_worksheet(const relationship &rel)
         write_attribute(
             "orientation", ws.page_setup().orientation() == xlnt::orientation::landscape ? "landscape" : "portrait");
         write_attribute("paperSize", static_cast<std::size_t>(ws.page_setup().paper_size()));
-		if (ws.page_setup().fit_to_height())
-			write_attribute("fitToHeight", write_bool(ws.page_setup().fit_to_height()));
-		if (ws.page_setup().fit_to_width())
-			write_attribute("fitToWidth", write_bool(ws.page_setup().fit_to_width()));
+		if (ws.page_setup().fit_to_height() > 1)
+			write_attribute("fitToHeight", ws.page_setup().fit_to_height());
+		if (ws.page_setup().fit_to_width() > 1)
+			write_attribute("fitToWidth", ws.page_setup().fit_to_width());
+		if (ws.page_setup().scale() > 1)
+			write_attribute("scale", ws.page_setup().scale()); //skip default values 
 		if (ws.page_setup().black_and_white())
 			write_attribute("blackAndWhite", write_bool(true)); //skip default values 
 		if (ws.page_setup().draft())

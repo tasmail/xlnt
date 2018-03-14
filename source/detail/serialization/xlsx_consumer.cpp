@@ -892,7 +892,9 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
         }
         else if (current_worksheet_element == qn("spreadsheetml", "printOptions")) // CT_PrintOptions 0-1
         {
-			page_setup ps = ws.page_setup();
+			page_setup ps;
+			if (ws.has_page_setup())
+				ps = ws.page_setup();
 
 			ps.horizontal_centered(is_true(parser().attribute("horizontalCentered")));
 			ps.vertical_centered(is_true(parser().attribute("verticalCentered")));
@@ -916,16 +918,18 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
         }
         else if (current_worksheet_element == qn("spreadsheetml", "pageSetup")) // CT_PageSetup 0-1
         {
-			page_setup ps = ws.page_setup();
+			page_setup ps;
+			if (ws.has_page_setup())
+				ps = ws.page_setup();
 
 			if (parser().attribute_present("orientation"))
 				ps.orientation(parser().attribute<xlnt::orientation>("orientation"));
 			if (parser().attribute_present("paperSize"))
 				ps.paper_size(parser().attribute<xlnt::paper_size>("paperSize"));
 			if (parser().attribute_present("fitToHeight"))
-				ps.fit_to_height(is_true(parser().attribute("fitToHeight")));
+				ps.fit_to_height(parser().attribute<size_t>("fitToHeight"));
 			if (parser().attribute_present("fitToWidth"))
-				ps.fit_to_width(is_true(parser().attribute("fitToWidth")));
+				ps.fit_to_width(parser().attribute<size_t>("fitToWidth"));
 			if (parser().attribute_present("blackAndWhite"))
 				ps.black_and_white(is_true(parser().attribute("blackAndWhite")));
 			if (parser().attribute_present("draft"))
@@ -938,6 +942,8 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
 				ps.cell_error(parser().attribute<xlnt::cell_errors>("errors"));
 			if (parser().attribute_present("firstPageNumber"))
 				ps.first_page_number(parser().attribute<size_t>("firstPageNumber"));
+			if (parser().attribute_present("scale"))
+				ps.scale(parser().attribute<size_t>("scale"));
 
 			ws.page_setup(ps);
 		}
