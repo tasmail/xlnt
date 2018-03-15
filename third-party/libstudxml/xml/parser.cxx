@@ -767,13 +767,9 @@ namespace xml
           {
 			  qname_type qn;
 			  split_name(*atts, qn);
-			  // attribute_map_type::value_type v (qn, attribute_value_type ());   
-			  // v.second.value = *(atts + 1);
-			  // v.second.handled = false;
-			  // pe->attr_map_.insert (v);
 			  auto &item = pe->attr_map_[qn];
-			  item.value = *(atts + 1);
 			  item.handled = false;
+			  item.value = *(atts + 1);
 		  }
           else
           {
