@@ -710,8 +710,9 @@ void xlsx_consumer::read_worksheet_sheetdata()
 
                 if (current_element == qn("spreadsheetml", "v")) // s:ST_Xstring
                 {
-                    has_value = true;
-                    value_string = read_text();
+					skip_remaining_content(current_element);
+                    //has_value = true;
+                    //value_string = read_text();
                 }
                 else if (current_element == qn("spreadsheetml", "f")) // CT_CellFormula
                 {

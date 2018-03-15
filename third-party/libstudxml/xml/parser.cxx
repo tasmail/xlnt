@@ -755,9 +755,9 @@ namespace xml
       element_entry* pe (0);
       if (am)
       {
-        p.element_state_.push_back (element_entry (p.depth_ + 1));
-        pe = &p.element_state_.back ();
-      }
+		  auto &it = p.element_state_.insert(p.element_state_.end(), element_entry(p.depth_ + 1));
+		  pe = &(*it);
+	  }
 
       if (am || ae)
       {
@@ -765,19 +765,22 @@ namespace xml
         {
           if (am)
           {
-            qname_type qn;
-            split_name (*atts, qn);
-            attribute_map_type::value_type v (qn, attribute_value_type ());
-            v.second.value = *(atts + 1);
-            v.second.handled = false;
-            pe->attr_map_.insert (v);
-          }
+			  qname_type qn;
+			  split_name(*atts, qn);
+			  // attribute_map_type::value_type v (qn, attribute_value_type ());   
+			  // v.second.value = *(atts + 1);
+			  // v.second.handled = false;
+			  // pe->attr_map_.insert (v);
+			  auto &item = pe->attr_map_[qn];
+			  item.value = *(atts + 1);
+			  item.handled = false;
+		  }
           else
           {
-            p.attr_.push_back (attribute_type ());
-            split_name (*atts, p.attr_.back ().qname);
-            p.attr_.back ().value = *(atts + 1);
-          }
+			  auto &it = p.attr_.insert(p.attr_.end(), attribute_type());
+			  split_name(*atts, it->qname);
+			  it->value = *(atts + 1);
+		  }
         }
 
         if (am)

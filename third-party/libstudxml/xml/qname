@@ -54,7 +54,11 @@ namespace xml
     friend bool
     operator< (const qname& x, const qname& y)
     {
-      return x.ns_ < y.ns_ || (x.ns_ == y.ns_ && x.name_ < y.name_);
+		if (x.ns_ != y.ns_)
+			return (x.ns_ < y.ns_);
+		if (x.name_ != y.name_)
+			return x.name_ < y.name_;
+		return false;
     }
 
     friend bool
