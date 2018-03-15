@@ -51,22 +51,27 @@ namespace xml
     // Note that comparison operators ignore prefixes.
     //
   public:
-    friend bool
-    operator< (const qname& x, const qname& y)
-    {
-      return x.ns_ < y.ns_ || (x.ns_ == y.ns_ && x.name_ < y.name_);
-    }
+    bool operator<(const qname& other) const
+	{
+		if (ns_ != other.ns_)
+			return ns_ < other.ns_;
+		if (name_ != other.name_)
+			return name_ < other.name_;
+		return false;
+	}
 
-    friend bool
-    operator== (const qname& x, const qname& y)
-    {
-      return x.ns_ == y.ns_ && x.name_ == y.name_;
-    }
+    bool operator==(const qname& other) const
+	{
+		if (ns_ != other.ns_)
+			return false;
+		if (name_ != other.name_)
+			return false;
+		return true;
+	}
 
-    friend bool
-    operator!= (const qname& x, const qname& y)
+	bool operator!=(const qname& other) const
     {
-      return !(x == y);
+      return !((*this) == other);
     }
 
   private:
