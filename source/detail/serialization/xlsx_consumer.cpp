@@ -916,7 +916,7 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
         }
         else if (current_worksheet_element == qn("spreadsheetml", "pageSetup")) // CT_PageSetup 0-1
         {
-			page_setup ps = ws.page_setup();
+			page_setup ps;
 
 			if (parser().attribute_present("orientation"))
 				ps.orientation(parser().attribute<xlnt::orientation>("orientation"));
