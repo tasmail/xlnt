@@ -896,10 +896,14 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
 			if (ws.has_page_setup())
 				ps = ws.page_setup();
 
-			ps.horizontal_centered(is_true(parser().attribute("horizontalCentered")));
-			ps.vertical_centered(is_true(parser().attribute("verticalCentered")));
-			ps.grid_lines(is_true(parser().attribute("gridLines")));
-			ps.headings(is_true(parser().attribute("headings")));
+			if (parser().attribute_present("horizontalCentered"))
+				ps.horizontal_centered(is_true(parser().attribute("horizontalCentered")));
+			if (parser().attribute_present("verticalCentered"))
+				ps.vertical_centered(is_true(parser().attribute("verticalCentered")));
+			if (parser().attribute_present("gridLines"))
+				ps.grid_lines(is_true(parser().attribute("gridLines")));
+			if (parser().attribute_present("headings"))
+				ps.headings(is_true(parser().attribute("headings")));
 
 			ws.page_setup(ps);
         }
