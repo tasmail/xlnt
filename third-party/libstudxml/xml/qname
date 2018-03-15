@@ -23,6 +23,10 @@ namespace xml
   class LIBSTUDXML_EXPORT qname
   {
   public:
+    qname (const qname& other) 
+	{
+		(*this) = other;
+	}
     qname () {}
     qname (const std::string& name): name_ (name) {}
     qname (const std::string& ns, const std::string& name)
@@ -51,7 +55,16 @@ namespace xml
     // Note that comparison operators ignore prefixes.
     //
   public:
-    bool operator<(const qname& other) const
+    inline qname& operator=(const qname& other)
+	{
+		ns_ = other.ns_;
+		name_ = other.name_;
+		prefix_ = other.prefix_;
+		
+		return (*this);
+	}
+
+    inline bool operator<(const qname& other) const
 	{
 		if (ns_ != other.ns_)
 			return ns_ < other.ns_;
@@ -60,7 +73,7 @@ namespace xml
 		return false;
 	}
 
-    bool operator==(const qname& other) const
+    inline bool operator==(const qname& other) const
 	{
 		if (ns_ != other.ns_)
 			return false;
@@ -69,7 +82,7 @@ namespace xml
 		return true;
 	}
 
-	bool operator!=(const qname& other) const
+	inline bool operator!=(const qname& other) const
     {
       return !((*this) == other);
     }
