@@ -146,6 +146,31 @@ private:
 namespace xlnt {
 namespace detail {
 
+const auto qn_row = qn("spreadsheetml", "row");
+const auto qn_worksheet = qn("spreadsheetml", "worksheet");
+const auto qn_sheetPtr = qn("spreadsheetml", "sheetPr");
+const auto qn_tabColor = qn("spreadsheetml", "tabColor");
+const auto qn_outlinePr = qn("spreadsheetml", "outlinePr");
+const auto qn_pageSetUpPr = qn("spreadsheetml", "pageSetUpPr");
+const auto qn_dimension = qn("spreadsheetml", "dimension");
+const auto qn_sheetViews = qn("spreadsheetml", "sheetViews");
+const auto qn_sheetView = qn("spreadsheetml", "sheetView");
+const auto qn_extLst = qn("spreadsheetml", "extLst");
+const auto qn_pivotSelection = qn("spreadsheetml", "pivotSelection");
+const auto qn_selection = qn("spreadsheetml", "selection");
+const auto qn_pane = qn("spreadsheetml", "pane");
+const auto qn_sheetData = qn("spreadsheetml", "sheetData");
+const auto qn_c = qn("spreadsheetml", "c");
+const auto qn_v = qn("spreadsheetml", "v");
+const auto qn_f = qn("spreadsheetml", "f");
+const auto qn_t = qn("spreadsheetml", "t");
+const auto qn_is = qn("spreadsheetml", "is");
+const auto qn_sheetCalcPr = qn("spreadsheetml", "sheetCalcPr");
+const auto qn_sheetProtection = qn("spreadsheetml", "sheetProtection");
+const auto qn_sheetFormatPr = qn("spreadsheetml", "sheetFormatPr");
+const auto qn_cols = qn("spreadsheetml", "cols");
+const auto qn_col = qn("spreadsheetml", "col");
+
 xlsx_consumer::xlsx_consumer(workbook &target)
     : target_(target),
       parser_(nullptr)
@@ -177,9 +202,9 @@ cell xlsx_consumer::read_cell()
 
     auto ws = worksheet(current_worksheet_);
 
-    if (in_element(qn("spreadsheetml", "sheetData")))
+    if (in_element(qn_sheetData))
     {
-        expect_start_element(qn("spreadsheetml", "row"), xml::content::complex); // CT_Row
+        expect_start_element(qn_row, xml::content::complex); // CT_Row
         auto row_index = static_cast<row_t>(std::stoul(parser().attribute("r")));
 
         if (parser().attribute_present("ht"))
@@ -202,12 +227,12 @@ cell xlsx_consumer::read_cell()
             "ph", "spans" });
     }
 
-    if (!in_element(qn("spreadsheetml", "row")))
+    if (!in_element(qn_row))
     {
         return cell(nullptr);
     }
 
-    expect_start_element(qn("spreadsheetml", "c"), xml::content::complex);
+    expect_start_element(qn_c, xml::content::complex);
 
     auto cell = streaming_ ? xlnt::cell(streaming_cell_.get())
         : ws.cell(cell_reference(parser().attribute("r")));
@@ -231,16 +256,16 @@ cell xlsx_consumer::read_cell()
     auto has_shared_formula = false;
     auto formula_value_string = std::string();
 
-    while (in_element(qn("spreadsheetml", "c")))
+    while (in_element(qn_c))
     {
         auto current_element = expect_start_element(xml::content::mixed);
 
-        if (current_element == qn("spreadsheetml", "v")) // s:ST_Xstring
+        if (current_element == qn_v) // s:ST_Xstring
         {
             has_value = true;
             value_string = read_text();
         }
-        else if (current_element == qn("spreadsheetml", "f")) // CT_CellFormula
+        else if (current_element == qn_f) // CT_CellFormula
         {
             has_formula = true;
 
@@ -254,11 +279,11 @@ cell xlsx_consumer::read_cell()
 
             formula_value_string = read_text();
         }
-        else if (current_element == qn("spreadsheetml", "is")) // CT_Rst
+        else if (current_element == qn_is) // CT_Rst
         {
-            expect_start_element(qn("spreadsheetml", "t"), xml::content::simple);
+            expect_start_element(qn_t, xml::content::simple);
             value_string = read_text();
-            expect_end_element(qn("spreadsheetml", "t"));
+            expect_end_element(qn_t);
         }
         else
         {
@@ -268,7 +293,7 @@ cell xlsx_consumer::read_cell()
         expect_end_element(current_element);
     }
 
-    expect_end_element(qn("spreadsheetml", "c"));
+    expect_end_element(qn_c);
 
     if (has_formula && !has_shared_formula)
     {
@@ -308,13 +333,13 @@ cell xlsx_consumer::read_cell()
         }
     }
 
-    if (!in_element(qn("spreadsheetml", "row")))
+    if (!in_element(qn_row))
     {
-        expect_end_element(qn("spreadsheetml", "row"));
+        expect_end_element(qn_row);
 
-        if (!in_element(qn("spreadsheetml", "sheetData")))
+        if (!in_element(qn_sheetData))
         {
-            expect_end_element(qn("spreadsheetml", "sheetData"));
+            expect_end_element(qn_sheetData);
         }
     }
 
@@ -347,31 +372,31 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
 
     auto ws = worksheet(current_worksheet_);
 
-    expect_start_element(qn("spreadsheetml", "worksheet"), xml::content::complex); // CT_Worksheet
+    expect_start_element(qn_worksheet, xml::content::complex); // CT_Worksheet
     skip_attributes({ qn("mc", "Ignorable") });
 
-    while (in_element(qn("spreadsheetml", "worksheet")))
+    while (in_element(qn_worksheet))
     {
         auto current_worksheet_element = expect_start_element(xml::content::complex);
 
-        if (current_worksheet_element == qn("spreadsheetml", "sheetPr")) // CT_SheetPr 0-1
+        if (current_worksheet_element == qn_sheetPtr) // CT_SheetPr 0-1
         {
             while (in_element(current_worksheet_element))
             {
                 auto sheet_pr_child_element = expect_start_element(xml::content::simple);
 
-                if (sheet_pr_child_element == qn("spreadsheetml", "tabColor")) // CT_Color 0-1
+                if (sheet_pr_child_element == qn_tabColor) // CT_Color 0-1
                 {
                     read_color();
                 }
-                else if (sheet_pr_child_element == qn("spreadsheetml", "outlinePr")) // CT_OutlinePr 0-1
+                else if (sheet_pr_child_element == qn_outlinePr) // CT_OutlinePr 0-1
                 {
                     skip_attribute("applyStyles"); // optional, boolean, false
                     skip_attribute("summaryBelow"); // optional, boolean, true
                     skip_attribute("summaryRight"); // optional, boolean, true
                     skip_attribute("showOutlineSymbols"); // optional, boolean, true
                 }
-                else if (sheet_pr_child_element == qn("spreadsheetml", "pageSetUpPr")) // CT_PageSetUpPr 0-1
+                else if (sheet_pr_child_element == qn_pageSetUpPr) // CT_PageSetUpPr 0-1
                 {
                     skip_attribute("autoPageBreaks"); // optional, boolean, true
                     skip_attribute("fitToPage"); // optional, boolean, false
@@ -394,15 +419,15 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
             skip_attribute("filterMode"); // optional, boolean, false
             skip_attribute("enableFormatConditionsCalculation"); // optional, boolean, true
         }
-        else if (current_worksheet_element == qn("spreadsheetml", "dimension")) // CT_SheetDimension 0-1
+        else if (current_worksheet_element == qn_dimension) // CT_SheetDimension 0-1
         {
             skip_remaining_content(current_worksheet_element);
         }
-        else if (current_worksheet_element == qn("spreadsheetml", "sheetViews")) // CT_SheetViews 0-1
+        else if (current_worksheet_element == qn_sheetViews) // CT_SheetViews 0-1
         {
             while (in_element(current_worksheet_element))
             {
-                expect_start_element(qn("spreadsheetml", "sheetView"), xml::content::complex); // CT_SheetView 1+
+                expect_start_element(qn_sheetView, xml::content::complex); // CT_SheetView 1+
 
                 sheet_view new_view;
                 new_view.id(parser().attribute<std::size_t>("workbookViewId"));
@@ -490,11 +515,11 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
                     "tabSelected", "showRuler", "showOutlineSymbols", "showWhiteSpace", "view", "topLeftCell",
                     "colorId", "zoomScale", "zoomScaleNormal", "zoomScaleSheetLayoutView", "zoomScalePageLayoutView" });
 
-                while (in_element(qn("spreadsheetml", "sheetView")))
+                while (in_element(qn_sheetView))
                 {
                     auto sheet_view_child_element = expect_start_element(xml::content::simple);
 
-                    if (sheet_view_child_element == qn("spreadsheetml", "pane")) // CT_Pane 0-1
+                    if (sheet_view_child_element == qn_pane) // CT_Pane 0-1
                     {
                         pane new_pane;
 
@@ -525,7 +550,7 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
 
                         new_view.pane(new_pane);
                     }
-                    else if (sheet_view_child_element == qn("spreadsheetml", "selection")) // CT_Selection 0-4
+                    else if (sheet_view_child_element == qn_selection) // CT_Selection 0-4
                     {
                         selection current_selection;
 
@@ -560,11 +585,11 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
 
                         skip_remaining_content(sheet_view_child_element);
                     }
-                    else if (sheet_view_child_element == qn("spreadsheetml", "pivotSelection")) // CT_PivotSelection 0-4
+                    else if (sheet_view_child_element == qn_pivotSelection) // CT_PivotSelection 0-4
                     {
                         skip_remaining_content(sheet_view_child_element);
                     }
-                    else if (sheet_view_child_element == qn("spreadsheetml", "extLst")) // CT_ExtensionList 0-1
+                    else if (sheet_view_child_element == qn_extLst) // CT_ExtensionList 0-1
                     {
                         skip_remaining_content(sheet_view_child_element);
                     }
@@ -576,20 +601,20 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
                     expect_end_element(sheet_view_child_element);
                 }
 
-                expect_end_element(qn("spreadsheetml", "sheetView"));
+                expect_end_element(qn_sheetView);
 
                 ws.d_->views_.push_back(new_view);
             }
         }
-        else if (current_worksheet_element == qn("spreadsheetml", "sheetFormatPr")) // CT_SheetFormatPr 0-1
+        else if (current_worksheet_element == qn_sheetFormatPr) // CT_SheetFormatPr 0-1
         {
             skip_remaining_content(current_worksheet_element);
         }
-        else if (current_worksheet_element == qn("spreadsheetml", "cols")) // CT_Cols 0+
+        else if (current_worksheet_element == qn_cols) // CT_Cols 0+
         {
-            while (in_element(qn("spreadsheetml", "cols")))
+            while (in_element(qn_cols))
             {
-                expect_start_element(qn("spreadsheetml", "col"), xml::content::simple);
+                expect_start_element(qn_col, xml::content::simple);
 
                 skip_attributes({ "bestFit", "collapsed", "outlineLevel" });
 
@@ -615,7 +640,7 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
                 auto hidden = parser().attribute_present("hidden")
                     ? is_true(parser().attribute("hidden")) : false;
 
-                expect_end_element(qn("spreadsheetml", "col"));
+                expect_end_element(qn_col);
 
                 for (auto column = min; column <= max; column++)
                 {
@@ -637,7 +662,7 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
                 }
             }
         }
-        else if (current_worksheet_element == qn("spreadsheetml", "sheetData")) // CT_SheetData 1
+        else if (current_worksheet_element == qn_sheetData) // CT_SheetData 1
         {
             return title;
         }
@@ -652,16 +677,16 @@ void xlsx_consumer::read_worksheet_sheetdata()
 {
     auto ws = worksheet(current_worksheet_);
 
-    if (stack_.back() != qn("spreadsheetml", "sheetData"))
+	if (stack_.back() != qn_sheetData)
     {
         return;
     }
 
     number_converter converter;
 
-    while (in_element(qn("spreadsheetml", "sheetData")))
+    while (in_element(qn_sheetData))
     {
-        expect_start_element(qn("spreadsheetml", "row"), xml::content::complex); // CT_Row
+        expect_start_element(qn_row, xml::content::complex); // CT_Row
         auto row_index = parser().attribute<row_t>("r");
 
         if (parser().attribute_present("ht"))
@@ -684,9 +709,9 @@ void xlsx_consumer::read_worksheet_sheetdata()
             "outlineLevel", "collapsed", "thickTop", "thickBot",
             "ph", "spans" });
 
-        while (in_element(qn("spreadsheetml", "row")))
+        while (in_element(qn_row))
         {
-            expect_start_element(qn("spreadsheetml", "c"), xml::content::complex);
+            expect_start_element(qn_c, xml::content::complex);
             auto cell = ws.cell(cell_reference(parser().attribute("r")));
 
             auto has_type = parser().attribute_present("t");
@@ -694,7 +719,7 @@ void xlsx_consumer::read_worksheet_sheetdata()
 
             if (parser().attribute_present("s"))
             {
-		            cell.format(target_.format(std::stoull(parser().attribute("s"))));
+				cell.format(target_.format(std::stoull(parser().attribute("s"))));
             }
 
             auto has_value = false;
@@ -704,17 +729,17 @@ void xlsx_consumer::read_worksheet_sheetdata()
             auto has_shared_formula = false;
             auto formula_value_string = std::string();
 
-            while (in_element(qn("spreadsheetml", "c")))
+            while (in_element(qn_c))
             {
                 auto current_element = expect_start_element(xml::content::mixed);
 
-                if (current_element == qn("spreadsheetml", "v")) // s:ST_Xstring
+                if (current_element == qn_v) // s:ST_Xstring
                 {
 					skip_remaining_content(current_element);
                     //has_value = true;
                     //value_string = read_text();
                 }
-                else if (current_element == qn("spreadsheetml", "f")) // CT_CellFormula
+                else if (current_element == qn_f) // CT_CellFormula
                 {
                     has_formula = true;
 
@@ -728,11 +753,11 @@ void xlsx_consumer::read_worksheet_sheetdata()
 
                     formula_value_string = read_text();
                 }
-                else if (current_element == qn("spreadsheetml", "is")) // CT_Rst
+                else if (current_element == qn_is) // CT_Rst
                 {
-                    expect_start_element(qn("spreadsheetml", "t"), xml::content::simple);
+                    expect_start_element(qn_t, xml::content::simple);
                     value_string = read_text();
-                    expect_end_element(qn("spreadsheetml", "t"));
+                    expect_end_element(qn_t);
                 }
                 else
                 {
@@ -742,7 +767,7 @@ void xlsx_consumer::read_worksheet_sheetdata()
                 expect_end_element(current_element);
             }
 
-            expect_end_element(qn("spreadsheetml", "c"));
+            expect_end_element(qn_c);
 
             if (has_formula && !has_shared_formula)
             {
@@ -782,10 +807,10 @@ void xlsx_consumer::read_worksheet_sheetdata()
 
         }
 
-        expect_end_element(qn("spreadsheetml", "row"));
+        expect_end_element(qn_row);
     }
 
-    expect_end_element(qn("spreadsheetml", "sheetData"));
+    expect_end_element(qn_sheetData);
 }
 
 worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
@@ -799,15 +824,15 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
 
     auto ws = worksheet(current_worksheet_);
 
-    while (in_element(qn("spreadsheetml", "worksheet")))
+    while (in_element(qn_worksheet))
     {
         auto current_worksheet_element = expect_start_element(xml::content::complex);
 
-        if (current_worksheet_element == qn("spreadsheetml", "sheetCalcPr")) // CT_SheetCalcPr 0-1
+        if (current_worksheet_element == qn_sheetCalcPr) // CT_SheetCalcPr 0-1
         {
             skip_remaining_content(current_worksheet_element);
         }
-        else if (current_worksheet_element == qn("spreadsheetml", "sheetProtection")) // CT_SheetProtection 0-1
+        else if (current_worksheet_element == qn_sheetProtection) // CT_SheetProtection 0-1
         {
             skip_remaining_content(current_worksheet_element);
         }
@@ -1124,7 +1149,7 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
         {
             skip_remaining_content(current_worksheet_element);
         }
-        else if (current_worksheet_element == qn("spreadsheetml", "extLst"))
+        else if (current_worksheet_element == qn_extLst)
         {
             skip_remaining_content(current_worksheet_element);
         }
@@ -1136,7 +1161,7 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
         expect_end_element(current_worksheet_element);
     }
 
-    expect_end_element(qn("spreadsheetml", "worksheet"));
+    expect_end_element(qn_worksheet);
 
     if (manifest.has_relationship(sheet_path, xlnt::relationship_type::comments))
     {
@@ -1197,8 +1222,8 @@ xml::parser &xlsx_consumer::parser()
 
 bool xlsx_consumer::has_cell()
 {
-    return in_element(qn("spreadsheetml", "row"))
-        || in_element(qn("spreadsheetml", "sheetData"));
+    return in_element(qn_row)
+        || in_element(qn_sheetData);
 }
 
 std::vector<relationship> xlsx_consumer::read_relationships(const path &part)
@@ -2381,7 +2406,7 @@ void xlsx_consumer::read_stylesheet()
                 throw xlnt::exception("counts don't match");
             }
         }
-        else if (current_style_element == qn("spreadsheetml", "extLst"))
+        else if (current_style_element == qn_extLst)
         {
             skip_remaining_content(current_style_element);
         }
