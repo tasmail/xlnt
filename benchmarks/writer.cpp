@@ -23,6 +23,7 @@
 
 #include <chrono>
 #include <iostream>
+#include <fstream>
 
 #include <helpers/timing.hpp>
 #include <xlnt/xlnt.hpp>
@@ -84,6 +85,28 @@ void timer(std::function<void(int, int)> fn, int cols, int rows)
 
 int main()
 {
+	const std::string name = "C:\\Users\\tas.MAXCRC\\Desktop\\EXCEL LARGE FILE SAMPLE.xlsx";
+	std::ifstream file(name);
+	if (file.good())
+	{
+		using xlnt::benchmarks::current_time;
+
+		const auto repeat = std::size_t(3);
+		auto time = std::numeric_limits<std::size_t>::max();
+
+		auto start = current_time();
+		std::cout << "start load" << std::endl;
+
+		xlnt::workbook wb;
+		wb.load(name);
+
+		time = std::min(current_time() - start, time);
+
+		std::cout << "load time " << time / 1000.0 << std::endl;
+
+		return 0;
+	}
+
     timer(&writer, 100, 100);
     timer(&writer, 1000, 100);
     timer(&writer, 4000, 100);
