@@ -737,7 +737,7 @@ public:
     /// </summary>
     xlnt::conditional_format conditional_format(const range_reference &ref, const condition &when);
 
-	xlnt::sheet_drawings &sheet_drawings() const;
+	xlnt::sheet_drawings sheet_drawings();
 private:
     friend class cell;
     friend class const_range_iterator;
@@ -745,6 +745,7 @@ private:
     friend class workbook;
     friend class detail::xlsx_consumer;
     friend class detail::xlsx_producer;
+	friend class sheet_drawings;
 
     /// <summary>
     /// Constructs a worksheet impl wrapper from d.
@@ -755,6 +756,11 @@ private:
     /// Creates a comments part in the manifest as a relationship target of this sheet.
     /// </summary>
     void register_comments_in_manifest();
+
+	/// <summary>
+	/// Creates a drawings part in the manifest as a relationship target of this sheet.
+	/// </summary>
+	void worksheet::register_drawings_in_manifest();
 
     /// <summary>
     /// Creates a calcChain part in the manifest if it doesn't already exist.

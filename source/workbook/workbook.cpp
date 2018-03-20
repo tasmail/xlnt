@@ -526,6 +526,48 @@ void workbook::register_worksheet_part(worksheet ws, relationship_type type)
         d_->sheet_title_rel_id_map_.at(ws.title()));
     path ws_path(ws_rel.source().path().parent().append(ws_rel.target().path()));
 
+	if (type == relationship_type::drawings)
+	{
+		if (!manifest().has_relationship(ws_path, relationship_type::drawings))
+		{
+			std::size_t file_number = 1;
+			path filename("drawing1.xml");
+			bool filename_exists = true;
+
+			while (filename_exists)
+			{
+				filename_exists = false;
+
+				for (auto current_ws_rel :
+					manifest().relationships(wb_rel.target().path(), xlnt::relationship_type::worksheet))
+				{
+					path current_ws_path(current_ws_rel.source().path().parent().append(current_ws_rel.target().path()));
+					if (!manifest().has_relationship(current_ws_path, xlnt::relationship_type::drawings)) continue;
+
+					for (auto current_ws_child_rel :
+						manifest().relationships(current_ws_path, xlnt::relationship_type::drawings))
+					{
+						if (current_ws_child_rel.target().path() == path("../drawings").append(filename))
+						{
+							filename_exists = true;
+							break;
+						}
+					}
+				}
+
+				if (filename_exists)
+				{
+					file_number++;
+					filename = path("drawing" + std::to_string(file_number) + ".xml");
+				}
+			}
+
+			const path relative_path(path("../drawings").append(filename));
+			manifest().register_relationship(
+				uri(ws_path.string()), relationship_type::vml_drawing, uri(relative_path.string()), target_mode::internal);
+		}
+	}
+
     if (type == relationship_type::comments)
     {
         if (!manifest().has_relationship(ws_path, relationship_type::vml_drawing))

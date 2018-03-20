@@ -218,6 +218,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\worksheet\sheet_drawings.cpp" />
     <ClInclude Include="$(ProjectDir)..\..\include\xlnt\xlnt.hpp" />
     <ClInclude Include="$(ProjectDir)..\..\include\xlnt\xlnt_config.hpp" />
     <ClInclude Include="$(ProjectDir)..\..\include\xlnt\cell\cell.hpp" />

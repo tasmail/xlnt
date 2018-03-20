@@ -123,6 +123,9 @@ private:
 
 	void write_comments(const relationship &rel, worksheet ws, const std::vector<cell_reference> &cells);
 	void write_vml_drawings(const relationship &rel, worksheet ws, const std::vector<cell_reference> &cells);
+	
+	// Drawings
+	void write_drawings(const relationship &rel, worksheet ws);
 
 	// Other Parts
 

@@ -75,6 +75,7 @@ class worksheet;
 class worksheet_iterator;
 class zip_file;
 class stylesheetview;
+class sheet_drawing;
 
 struct datetime;
 
@@ -98,6 +99,11 @@ public:
 	/// typedef for the iterator used for iterating through image bytes
 	/// </summary>
 	using vector_bytes = std::vector<std::uint8_t>;	
+	
+	/// <summary>
+	/// typedef for the vector of sheet_drawings
+	/// </summary>
+	using drawing_vector = std::vector<sheet_drawing>;
 
 	/// <summary>
     /// typedef for the iterator used for iterating through this workbook

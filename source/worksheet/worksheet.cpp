@@ -1068,9 +1068,15 @@ void worksheet::add_view(const sheet_view &new_view)
     d_->views_.push_back(new_view);
 }
 
-void worksheet::register_comments_in_manifest()
+void worksheet::
+register_comments_in_manifest()
 {
-    workbook().register_worksheet_part(*this, relationship_type::comments);
+	workbook().register_worksheet_part(*this, relationship_type::comments);
+}
+
+void worksheet::register_drawings_in_manifest()
+{
+	workbook().register_worksheet_part(*this, relationship_type::drawings);
 }
 
 void worksheet::register_calc_chain_in_manifest()
@@ -1157,9 +1163,13 @@ conditional_format worksheet::conditional_format(const range_reference &ref, con
 	return workbook().d_->stylesheet_.get().add_conditional_format_rule(d_, ref, when);
 }
 
-xlnt::sheet_drawings &worksheet::sheet_drawings() const
+xlnt::sheet_drawings worksheet::sheet_drawings()
 {
-	return d_->sheet_drawings_;
+	return xlnt::sheet_drawings(
+		this,
+		d_->sheet_drawings_
+	);
+
 }
 
 } // namespace xlnt

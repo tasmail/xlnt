@@ -33,6 +33,8 @@ void sample1()
 	{
 		printf(img.target().to_string().c_str());
 	}
+
+	wb_image.save(path_helper::sample_file("image~copy.xlsx"));
 }
 
 void sample2()

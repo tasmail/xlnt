@@ -2747,11 +2747,15 @@ void xlsx_producer::write_worksheet(const relationship &rel)
             {
                 write_comments(child_rel, ws, cells_with_comments);
             }
-            else if (child_rel.type() == relationship_type::vml_drawing)
-            {
-                write_vml_drawings(child_rel, ws, cells_with_comments);
-            }
-        }
+			else if (child_rel.type() == relationship_type::vml_drawing)
+			{
+				write_vml_drawings(child_rel, ws, cells_with_comments);
+			}
+			else if (child_rel.type() == relationship_type::drawings)
+			{
+				write_drawings(child_rel, ws);
+			}
+		}
     }
 }
 
@@ -3004,6 +3008,10 @@ void xlsx_producer::write_vml_drawings(const relationship &rel, worksheet ws, co
     }
 
     write_end_element("xml");
+}
+
+void xlsx_producer::write_drawings(const relationship &rel, worksheet ws)
+{
 }
 
 // Other Parts

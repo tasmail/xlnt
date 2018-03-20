@@ -23,44 +23,63 @@
 // @license: http://www.opensource.org/licenses/mit-license.php
 // @author: see AUTHORS file
 
-#pragma once
-
 #include <xlnt/xlnt_config.hpp>
-#include <xlnt/workbook/workbook.hpp>
+#include <xlnt/worksheet/worksheet.hpp>
 #include <xlnt/worksheet/sheet_drawing.hpp>
+#include <xlnt/worksheet/sheet_drawings.hpp>
 
 namespace xlnt {
 
-class worksheet;
+	sheet_drawings::sheet_drawings(
+		worksheet* parent, 
+		workbook::drawing_vector& drawings):
+		parent_(parent),
+		drawings_(drawings)
+	{
+	}
 
-/// <summary>
-/// </summary>
-class XLNT_API sheet_drawings
-{
-public:
-	sheet_drawings(worksheet* parent_, workbook::drawing_vector& drawings);
+	sheet_drawings::sheet_drawings(const sheet_drawings& other):
+		parent_(other.parent_),
+		drawings_(other.drawings_)
+	{
+	}
+
+	sheet_drawings& sheet_drawings::operator=(const sheet_drawings& other)
+	{
+		this->parent_ = other.parent_;
+		this->drawings_ = other.drawings_;
+
+		return (*this);
+	}
+
+	const workbook::drawing_vector& sheet_drawings::drawings() const
+	{
+		return drawings_;
+	}
 	
-	sheet_drawings(const sheet_drawings& other);
+	void sheet_drawings::add_drawing(const sheet_drawing& drawing)
+	{
+		drawings_.push_back(drawing);
+		parent_->register_drawings_in_manifest();
+	}
 
-	sheet_drawings& operator=(const sheet_drawings& other);
-
-	const workbook::drawing_vector& drawings() const;	
-
-	void add_drawing(const sheet_drawing& drawing);
-
-	void add_drawing_image(
+	void sheet_drawings::add_drawing_image(
 		const workbook::vector_bytes &image,
 		const sheet_drawing& drawing,
 		const std::string &extension
-	);
-	
-	const workbook::vector_bytes &get_drawing_image(
+	)
+	{
+	}
+
+	const workbook::vector_bytes &sheet_drawings::get_drawing_image(
 		const sheet_drawing& drawing
-	);
-private:
-	friend class worksheet;
-	worksheet* parent_;
-	workbook::drawing_vector& drawings_;
-};
+	)
+	{
+		static workbook::vector_bytes empty;
+		if (!drawing.picture_path.is_set() || !parent_->workbook().has_image(drawing.picture_path.get()))
+			return empty;
+
+		return parent_->workbook().get_image(drawing.picture_path.get());
+	}
 
 } // namespace xlnt
