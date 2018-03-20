@@ -414,6 +414,7 @@ cell_comments from_string(const std::string &string)
 {
 	if (iequals(string, "atEnd")) return cell_comments::at_end;
 	else if (iequals(string, "asDisplayed")) return cell_comments::as_displayed;
+	else if (iequals(string, "none")) return cell_comments::none;
 
 	default_case(cell_comments::none);
 }
