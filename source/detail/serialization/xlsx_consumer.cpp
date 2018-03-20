@@ -2569,10 +2569,10 @@ void xlsx_consumer::read_drawings(worksheet ws, map_strings relation_paths)
 
 	while (true)
 	{
-		auto ce = expect_start_element(xml::content::complex);
-
-		if (ce == qn("spreadsheetdrawing", "wsDr"))
+		if (!in_element(qn("spreadsheetdrawing", "wsDr")))
 			break;
+
+		auto ce = expect_start_element(xml::content::complex);
 
 		auto is_one_cell = (ce == qn("spreadsheetdrawing", "oneCellAnchor"));
 		auto is_two_cell = (ce == qn("spreadsheetdrawing", "twoCellAnchor"));
@@ -2643,6 +2643,8 @@ void xlsx_consumer::read_drawings(worksheet ws, map_strings relation_paths)
 		skip_remaining_content(ce);
 		expect_end_element(ce);
 	}
+
+	expect_end_element(qn("spreadsheetdrawing", "wsDr"));
 }
 
 
