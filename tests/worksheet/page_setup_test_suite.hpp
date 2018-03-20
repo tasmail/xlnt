@@ -52,11 +52,11 @@ public:
         ps.fit_to_page(true);
         xlnt_assert(ps.fit_to_page());
 
-        xlnt_assert(!ps.fit_to_height());
+        xlnt_assert(ps.fit_to_height() == 1);
         ps.fit_to_height(true);
         xlnt_assert(ps.fit_to_height());
 
-        xlnt_assert(!ps.fit_to_width());
+        xlnt_assert(ps.fit_to_width() == 1);
         ps.fit_to_width(true);
         xlnt_assert(ps.fit_to_width());
 

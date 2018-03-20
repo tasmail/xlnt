@@ -121,7 +121,7 @@ private:
     /// <summary>
     /// The quadrant
     /// </summary>
-    pane_corner pane_;
+    pane_corner pane_ = pane_corner::top_left;
 };
 
 } // namespace xlnt

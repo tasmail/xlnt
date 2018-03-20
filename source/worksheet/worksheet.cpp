@@ -272,16 +272,19 @@ void worksheet::title(const std::string &title)
 
 cell_reference worksheet::frozen_panes() const
 {
-    if (!has_frozen_panes())
-    {
-        throw xlnt::invalid_attribute();
-    }
+	if (!has_frozen_panes())
+	{
+		throw xlnt::invalid_attribute();
+	}
 
 	auto& pane = d_->views_.front().pane();
 
-	cell_reference res(pane.x_split, pane.y_split);
+	if (!pane.top_left_cell.is_set())
+	{
+		throw xlnt::invalid_attribute();
+	}
 
-    return res;
+	return pane.top_left_cell.get();
 }
 
 void worksheet::freeze_panes(xlnt::cell top_left_cell)
