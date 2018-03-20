@@ -38,6 +38,11 @@ class XLNT_API selection
 public:
 	using list_range_reference = std::list<range_reference>;
 
+	selection()
+	{
+		sqref_.push_back(range_reference());
+	}
+
     /// <summary>
     /// Returns true if this selection has a defined active cell.
     /// </summary>
