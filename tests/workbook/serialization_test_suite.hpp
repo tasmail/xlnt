@@ -413,11 +413,11 @@ public:
         xlnt_assert(!ws.row_properties(4).height.is_set());
         xlnt_assert_equals(ws.row_properties(5).height.get(), 100);
 
-        xlnt_assert_delta(ws.column_properties("A").width.get(), 15.949776785714286, 1.0E-9);
+		xlnt_assert_delta(ws.column_properties("A").width.get(), 16.6640625, 0.01);
         xlnt_assert(!ws.column_properties("B").width.is_set());
-        xlnt_assert_delta(ws.column_properties("C").width.get(), 15.949776785714286, 1.0E-9);
+        xlnt_assert_delta(ws.column_properties("C").width.get(), 16.6640625, 0.01);
         xlnt_assert(!ws.column_properties("D").width.is_set());
-        xlnt_assert_delta(ws.column_properties("E").width.get(), 15.949776785714286, 1.0E-9);
+        xlnt_assert_delta(ws.column_properties("E").width.get(), 16.6640625, 0.01);
     }
 
     void test_write_custom_heights_widths()
