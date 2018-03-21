@@ -738,6 +738,37 @@ public:
     xlnt::conditional_format conditional_format(const range_reference &ref, const condition &when);
 
 	xlnt::sheet_drawings &sheet_drawings() const;
+
+	/// <summary>
+	/// Set default row height.
+	/// </summary>
+	void default_row_height(double);
+
+	/// <summary>
+	/// Return default row height.
+	/// </summary>
+	double default_row_height();
+
+	/// <summary>
+	/// Is default row height set.
+	/// </summary>
+	bool has_default_row_height();
+
+	/// <summary>
+	/// Set default column width.
+	/// </summary>
+	void default_column_width(double);
+
+	/// <summary>
+	/// Return default column width.
+	/// </summary>
+	double default_column_width();
+
+	/// <summary>
+	/// Is default column width set.
+	/// </summary>
+	bool has_default_column_width();
+
 private:
     friend class cell;
     friend class const_range_iterator;

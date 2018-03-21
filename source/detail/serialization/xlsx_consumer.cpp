@@ -608,7 +608,14 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
         }
         else if (current_worksheet_element == qn_sheetFormatPr) // CT_SheetFormatPr 0-1
         {
-            skip_remaining_content(current_worksheet_element);
+			if (parser().attribute_present("defaultColWidth"))
+			{
+				ws.default_column_width(parser().attribute<double>("defaultColWidth"));
+			}
+			if (parser().attribute_present("defaultRowHeight"))
+			{
+				ws.default_row_height(parser().attribute<double>("defaultRowHeight"));
+			}
         }
         else if (current_worksheet_element == qn_cols) // CT_Cols 0+
         {
@@ -972,7 +979,7 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
 			if (parser().attribute_present("firstPageNumber"))
 				ps.first_page_number(parser().attribute<size_t>("firstPageNumber"));
 			if (parser().attribute_present("scale"))
-				ps.scale(parser().attribute<size_t>("scale"));
+				ps.scale((double)parser().attribute<size_t>("scale"));
 
 			ws.page_setup(ps);
 		}

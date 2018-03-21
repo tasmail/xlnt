@@ -1117,10 +1117,10 @@ const std::vector<column_t> &worksheet::page_break_columns() const
     return d_->column_breaks_;
 }
 
+static const auto DefaultColumnWidth = 51.85;
+
 double worksheet::column_width(column_t column) const
 {
-    static const auto DefaultColumnWidth = 51.85;
-
     if (has_column_properties(column))
     {
         return column_properties(column).width.get();
@@ -1131,10 +1131,27 @@ double worksheet::column_width(column_t column) const
     }
 }
 
+void worksheet::default_column_width(double value)
+{
+	d_->default_col_width_ = value;
+}
+
+double worksheet::default_column_width()
+{
+	if (!d_->default_col_width_.is_set())
+		return points_to_pixels(DefaultColumnWidth, 96.0);
+	return d_->default_col_width_.get();
+}
+
+bool worksheet::has_default_column_width()
+{
+	return d_->default_col_width_.is_set();
+}
+
+static const auto DefaultRowHeight = 15.0;
+
 double worksheet::row_height(row_t row) const
 {
-    static const auto DefaultRowHeight = 15.0;
-
     if (has_row_properties(row))
     {
         return row_properties(row).height.get();
@@ -1143,6 +1160,23 @@ double worksheet::row_height(row_t row) const
     {
         return points_to_pixels(DefaultRowHeight, 96.0);
     }
+}
+
+void worksheet::default_row_height(double value)
+{
+	d_->default_row_height_ = value;
+}
+
+double worksheet::default_row_height()
+{
+	if (!d_->default_row_height_.is_set())
+		points_to_pixels(DefaultRowHeight, 96.0);
+	return d_->default_row_height_.get();
+}
+
+bool worksheet::has_default_row_height()
+{
+	return d_->default_row_height_.is_set();
 }
 
 void worksheet::garbage_collect_formulae()

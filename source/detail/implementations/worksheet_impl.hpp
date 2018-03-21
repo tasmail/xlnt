@@ -121,6 +121,17 @@ struct worksheet_impl
     std::unordered_map<std::string, comment> comments_;
 
 	sheet_drawings sheet_drawings_;
+
+	/// <summary>
+	/// Default row height.
+	/// </summary>
+	optional<double>  default_row_height_;
+
+	/// <summary>
+	/// Default column width.
+	/// </summary>
+	optional<double>  default_col_width_;
+
 };
 
 } // namespace detail
