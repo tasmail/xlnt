@@ -24,17 +24,46 @@
 #include <helpers/path_helper.hpp>
 #include <xlnt/xlnt.hpp>
 
-void sample1()
+void load_image()
 {
 	xlnt::workbook wb_image;
 	wb_image.load(path_helper::sample_file("image.xlsx"));
-	auto images = wb_image.manifest().relationships(xlnt::relationship_type::image);
-	for (const auto &img : images)
+	auto sheet_drawings = wb_image.active_sheet().sheet_drawings();
+	for (const auto &sheet_drawing : sheet_drawings.drawings())
 	{
-		printf(img.target().to_string().c_str());
+		if (sheet_drawing.picture_name.is_set()) {
+			printf(sheet_drawing.picture_name.get().c_str());
+			printf("\n");
+		}
 	}
+}
 
-	wb_image.save(path_helper::sample_file("image~copy.xlsx"));
+void save_image()
+{
+	xlnt::workbook wb_image;
+
+	auto sheet_drawings = wb_image.active_sheet().sheet_drawings();
+	xlnt::sheet_drawing drawing;
+	drawing.from.column_index(5);
+	drawing.from.row(5);
+	drawing.picture_name.set("cafe.jpg");
+
+	auto image_path = path_helper::sample_file("cafe.jpg");
+	std::ifstream file(image_path.string(), std::ios::binary);
+	file.unsetf(std::ios::skipws);
+
+	xlnt::workbook::vector_bytes image_data;
+	
+	image_data.insert(image_data.begin(),
+		std::istream_iterator<std::uint8_t>(file),
+		std::istream_iterator<std::uint8_t>());
+
+	sheet_drawings.add_drawing_image(
+		drawing,
+		image_data,
+		"jpg");
+
+	wb_image.save(path_helper::sample_file("image~.xlsx"));
 }
 
 void sample2()
@@ -55,9 +84,9 @@ void sample2()
 
 int main()
 {
-	sample1();
+	load_image();
 
 	sample2();
 
-    return 0;
+	return 0;
 }

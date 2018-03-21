@@ -33,12 +33,20 @@ namespace xlnt {
 
 class worksheet;
 
+namespace detail
+{
+	class xlsx_consumer;
+}
+
 /// <summary>
 /// </summary>
 class XLNT_API sheet_drawings
 {
 public:
-	sheet_drawings(worksheet* parent_, workbook::drawing_vector& drawings);
+	sheet_drawings(
+		worksheet* parent_, 
+		workbook::drawing_vector& drawings,
+		workbook::images_map& images);
 	
 	sheet_drawings(const sheet_drawings& other);
 
@@ -46,21 +54,26 @@ public:
 
 	const workbook::drawing_vector& drawings() const;	
 
-	void add_drawing(const sheet_drawing& drawing);
-
 	void add_drawing_image(
-		const workbook::vector_bytes &image,
 		const sheet_drawing& drawing,
+		const workbook::vector_bytes &image,
 		const std::string &extension
 	);
 	
 	const workbook::vector_bytes &get_drawing_image(
 		const sheet_drawing& drawing
-	);
+	) const;
 private:
 	friend class worksheet;
+	friend class sheet_drawing;
+	friend class detail::xlsx_consumer;
+
+	void add_drawing(
+		const sheet_drawing& drawing);
+
 	worksheet* parent_;
 	workbook::drawing_vector& drawings_;
+	workbook::images_map& images_;
 };
 
 } // namespace xlnt

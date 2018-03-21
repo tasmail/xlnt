@@ -105,6 +105,12 @@ public:
 	/// </summary>
 	using drawing_vector = std::vector<sheet_drawing>;
 
+
+	/// <summary>
+	/// typedef for the images of sheet_drawings
+	/// </summary>
+	using images_map = std::unordered_map<std::string, std::vector<std::uint8_t>>;
+
 	/// <summary>
     /// typedef for the iterator used for iterating through this workbook
     /// (non-const) in a range-based for loop.

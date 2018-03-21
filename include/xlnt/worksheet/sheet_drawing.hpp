@@ -29,6 +29,13 @@
 
 namespace xlnt {
 
+class sheet_drawings;
+
+namespace detail
+{
+	class xlsx_consumer;
+}
+
 /// <summary>
 /// </summary>
 class XLNT_API sheet_drawing
@@ -40,8 +47,11 @@ public:
 	optional<cell_reference> to;
 	optional<int> to_col_offset;
 	optional<int> to_row_offset;
-	optional<int> picture_id;
 	optional<std::string> picture_name;
+private:
+	friend class sheet_drawings;
+	friend class detail::xlsx_consumer;
+	optional<int> picture_id;
 	optional<std::string> picture_path;
 };
 

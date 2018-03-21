@@ -50,6 +50,7 @@ class variant;
 class workbook;
 class worksheet;
 class cell_reference;
+class sheet_drawing;
 
 namespace detail {
 
@@ -73,6 +74,7 @@ public:
 
 private:
     friend class xlnt::streaming_workbook_reader;
+	friend class xlnt::sheet_drawing;
 
     void open(std::istream &source);
 
@@ -223,19 +225,19 @@ private:
 	/// <summary>
 	///
 	/// </summary>
-	void read_comments(worksheet ws);
+	void read_comments(worksheet& ws);
 
 	/// <summary>
 	///
 	/// </summary>
-	void read_vml_drawings(worksheet ws);
+	void read_vml_drawings(worksheet& ws);
 
 	using map_strings=std::map<std::string, std::string>;
 
 	/// <summary>
 	///
 	/// </summary>
-	void read_drawings(worksheet ws, map_strings relation_paths);
+	void read_drawings(worksheet& ws, map_strings relation_paths);
 
 	void read_drawing_anchor(
 		const std::string& name,
@@ -269,6 +271,8 @@ private:
 	///
 	/// </summary>
 	void read_image(const path &part);
+
+	void read_drawing_images(worksheet& ws, const xlnt::path &image_path);
 
     // Common Section Readers
 

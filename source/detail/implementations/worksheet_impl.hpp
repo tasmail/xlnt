@@ -120,7 +120,8 @@ struct worksheet_impl
 
     std::unordered_map<std::string, comment> comments_;
 
-	workbook::drawing_vector sheet_drawings_;
+	workbook::drawing_vector sheet_drawings_;	
+	workbook::images_map sheet_images_;
 };
 
 } // namespace detail

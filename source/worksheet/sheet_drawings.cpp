@@ -31,16 +31,22 @@
 namespace xlnt {
 
 	sheet_drawings::sheet_drawings(
-		worksheet* parent, 
-		workbook::drawing_vector& drawings):
+		worksheet* parent,
+		workbook::drawing_vector& drawings,
+		workbook::images_map& images
+	) :
 		parent_(parent),
-		drawings_(drawings)
+		drawings_(drawings),
+		images_(images)
 	{
 	}
 
-	sheet_drawings::sheet_drawings(const sheet_drawings& other):
+	sheet_drawings::sheet_drawings(
+		const sheet_drawings& other
+	) :
 		parent_(other.parent_),
-		drawings_(other.drawings_)
+		drawings_(other.drawings_),
+		images_(other.images_)
 	{
 	}
 
@@ -48,6 +54,7 @@ namespace xlnt {
 	{
 		this->parent_ = other.parent_;
 		this->drawings_ = other.drawings_;
+		this->images_ = other.images_;
 
 		return (*this);
 	}
@@ -56,7 +63,7 @@ namespace xlnt {
 	{
 		return drawings_;
 	}
-	
+
 	void sheet_drawings::add_drawing(const sheet_drawing& drawing)
 	{
 		drawings_.push_back(drawing);
@@ -64,22 +71,31 @@ namespace xlnt {
 	}
 
 	void sheet_drawings::add_drawing_image(
-		const workbook::vector_bytes &image,
 		const sheet_drawing& drawing,
+		const workbook::vector_bytes &image,
 		const std::string &extension
 	)
 	{
+		sheet_drawing drawing_ = drawing;
+		
+		// TODO: generate picture content
+		drawing_.picture_path.set(std::string("xl/images/ssss.jpg"));
+		add_drawing(drawing_);
 	}
 
 	const workbook::vector_bytes &sheet_drawings::get_drawing_image(
 		const sheet_drawing& drawing
-	)
+	) const
 	{
 		static workbook::vector_bytes empty;
-		if (!drawing.picture_path.is_set() || !parent_->workbook().has_image(drawing.picture_path.get()))
+		if (!drawing.picture_path.is_set())
 			return empty;
 
-		return parent_->workbook().get_image(drawing.picture_path.get());
+		const auto& it = images_.find(drawing.picture_path.get());
+		if (images_.end() == it)
+			return empty;
+
+		return it->second;
 	}
 
 } // namespace xlnt

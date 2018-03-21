@@ -1199,7 +1199,7 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
 		{
 			auto image_path = manifest.canonicalize({ workbook_rel, sheet_rel, package_rel });
 			relation_paths[package_rel.id()] = image_path.string();
-			read_image(image_path);
+			read_drawing_images(ws, image_path);
 		}
 
 		auto drawings_part_streambuf = archive_->open(drawings_part);
@@ -2563,7 +2563,7 @@ void xlsx_consumer::read_drawing_anchor(
 	expect_end_element(qn("spreadsheetdrawing", name));
 }
 
-void xlsx_consumer::read_drawings(worksheet ws, map_strings relation_paths)
+void xlsx_consumer::read_drawings(worksheet& ws, map_strings relation_paths)
 {
 	expect_start_element(qn("spreadsheetdrawing", "wsDr"), xml::content::complex);
 
@@ -2650,11 +2650,11 @@ void xlsx_consumer::read_drawings(worksheet ws, map_strings relation_paths)
 
 // Sheet Relationship Target Parts
 
-void xlsx_consumer::read_vml_drawings(worksheet /*ws*/)
+void xlsx_consumer::read_vml_drawings(worksheet& /*ws*/)
 {
 }
 
-void xlsx_consumer::read_comments(worksheet ws)
+void xlsx_consumer::read_comments(worksheet& ws)
 {
     std::vector<std::string> authors;
 
@@ -2713,6 +2713,14 @@ void xlsx_consumer::read_unknown_parts()
 
 void xlsx_consumer::read_unknown_relationships()
 {
+}
+
+void xlsx_consumer::read_drawing_images(worksheet& ws, const xlnt::path &image_path)
+{
+	auto image_streambuf = archive_->open(image_path);	
+	vector_ostreambuf buffer(ws.d_->sheet_images_[image_path.string()]);
+	std::ostream out_stream(&buffer);
+	out_stream << image_streambuf.get();
 }
 
 void xlsx_consumer::read_image(const xlnt::path &image_path)

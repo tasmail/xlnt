@@ -1167,7 +1167,8 @@ xlnt::sheet_drawings worksheet::sheet_drawings()
 {
 	return xlnt::sheet_drawings(
 		this,
-		d_->sheet_drawings_
+		d_->sheet_drawings_,
+		d_->sheet_images_
 	);
 
 }
