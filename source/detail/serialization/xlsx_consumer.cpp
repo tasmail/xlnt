@@ -1194,11 +1194,9 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
 		auto drawings_part = manifest.canonicalize({ workbook_rel, sheet_rel,
 			manifest.relationship(sheet_path, xlnt::relationship_type::drawings) });
 		
-		map_strings relation_paths;
 		for (const auto &package_rel : read_relationships(drawings_part))
 		{
 			auto image_path = manifest.canonicalize({ workbook_rel, sheet_rel, package_rel });
-			relation_paths[package_rel.id()] = image_path.string();
 			read_drawing_images(ws, image_path);
 		}
 
@@ -1207,8 +1205,7 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
 		auto receive = xml::parser::receive_default;
 		xml::parser parser(drawings_part_stream, drawings_part.string(), receive);
 		parser_ = &parser;
-
-		read_drawings(ws, relation_paths);
+		read_drawings(ws, drawings_part);
 	}
 
     return ws;
@@ -2563,7 +2560,7 @@ void xlsx_consumer::read_drawing_anchor(
 	expect_end_element(qn("spreadsheetdrawing", name));
 }
 
-void xlsx_consumer::read_drawings(worksheet& ws, map_strings relation_paths)
+void xlsx_consumer::read_drawings(worksheet& ws, path rel_path)
 {
 	expect_start_element(qn("spreadsheetdrawing", "wsDr"), xml::content::complex);
 
@@ -2620,12 +2617,7 @@ void xlsx_consumer::read_drawings(worksheet& ws, map_strings relation_paths)
 					expect_start_element(qn("drawingml", "blip"), xml::content::simple);
 					auto ns = constants::namespaces().find("r");
 					auto rel_id = parser().attribute<std::string>(xml::qname(ns->second, "embed", "r"));
-					auto it_rel = relation_paths.find(rel_id);
-					
-					if (relation_paths.end() != it_rel)
-						sheet_drawing.picture_path = it_rel->second;
-					else
-						sheet_drawing.picture_path = rel_id;
+					sheet_drawing.picture_rel = rel_id;
 
 					expect_end_element(qn("drawingml", "blip"));
 				}

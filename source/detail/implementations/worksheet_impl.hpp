@@ -36,6 +36,7 @@
 #include <xlnt/worksheet/header_footer.hpp>
 #include <xlnt/worksheet/row_properties.hpp>
 #include <xlnt/worksheet/sheet_drawings.hpp>
+#include <xlnt/packaging/manifest.hpp>
 
 namespace xlnt {
 

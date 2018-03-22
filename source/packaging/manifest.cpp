@@ -90,6 +90,24 @@ bool manifest::has_relationship(const path &part, relationship_type type) const
     return false;
 }
 
+bool manifest::has_relationship(const path &source, const std::string &rel_id) const
+{
+	if (relationships_.find(source) == relationships_.end())
+	{
+		return false;
+	}
+
+	for (const auto &rel : relationships_.at(source))
+	{
+		if (rel.second.id() == rel_id)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 relationship manifest::relationship(const path &part, relationship_type type) const
 {
     if (relationships_.find(part) == relationships_.end()) throw key_not_found();

@@ -31,8 +31,11 @@ void load_image()
 	auto sheet_drawings = wb_image.active_sheet().sheet_drawings();
 	for (const auto &sheet_drawing : sheet_drawings.drawings())
 	{
+		const auto& data = sheet_drawings.get_drawing_image(sheet_drawing);
+
 		if (sheet_drawing.picture_name.is_set()) {
 			printf(sheet_drawing.picture_name.get().c_str());
+			printf("Data lenght: %d", data.size());
 			printf("\n");
 		}
 	}

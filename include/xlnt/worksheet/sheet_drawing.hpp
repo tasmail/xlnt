@@ -52,7 +52,7 @@ private:
 	friend class sheet_drawings;
 	friend class detail::xlsx_consumer;
 	optional<int> picture_id;
-	optional<std::string> picture_path;
+	optional<std::string> picture_rel;
 };
 
 } // namespace xlnt

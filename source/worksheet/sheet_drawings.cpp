@@ -27,6 +27,7 @@
 #include <xlnt/worksheet/worksheet.hpp>
 #include <xlnt/worksheet/sheet_drawing.hpp>
 #include <xlnt/worksheet/sheet_drawings.hpp>
+#include <detail/implementations/worksheet_impl.hpp>
 
 namespace xlnt {
 
@@ -79,7 +80,7 @@ namespace xlnt {
 		sheet_drawing drawing_ = drawing;
 		
 		// TODO: generate picture content
-		drawing_.picture_path.set(std::string("xl/images/ssss.jpg"));
+		// drawing_.picture_path.set(std::string("xl/images/ssss.jpg"));
 		add_drawing(drawing_);
 	}
 
@@ -88,14 +89,25 @@ namespace xlnt {
 	) const
 	{
 		static workbook::vector_bytes empty;
-		if (!drawing.picture_path.is_set())
+		if (!drawing.picture_rel.is_set())
 			return empty;
 
-		const auto& it = images_.find(drawing.picture_path.get());
-		if (images_.end() == it)
-			return empty;
+		const auto relId = drawing.picture_rel.get();
 
-		return it->second;
+		const auto &manifest = parent_->d_->parent_->manifest();
+
+		path partPath;
+		if (manifest.has_relationship(partPath, relId))
+		{
+			auto rel = manifest.relationship(partPath, relId);
+			const auto& it = images_.find(rel.target().path().string());
+			if (images_.end() == it)
+				return empty;
+
+			return it->second;
+		}
+
+		return empty;
 	}
 
 } // namespace xlnt
