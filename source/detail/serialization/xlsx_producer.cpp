@@ -2135,7 +2135,10 @@ void xlsx_producer::write_worksheet(const relationship &rel)
 	if (ws.has_default_column_width())
 		write_attribute("defaultColWidth", ws.default_column_width());
 	if (ws.has_default_row_height())
+	{
+		write_attribute("customHeight", write_bool(true));
 		write_attribute("defaultRowHeight", ws.default_row_height());
+	}
 	else
 		write_attribute("defaultRowHeight", "16");
     write_end_element(xmlns, "sheetFormatPr");

@@ -612,9 +612,11 @@ std::string xlsx_consumer::read_worksheet_begin(const std::string &rel_id)
 			{
 				ws.default_column_width(parser().attribute<double>("defaultColWidth"));
 			}
-			if (parser().attribute_present("defaultRowHeight"))
+			if (parser().attribute_present("defaultRowHeight") && 
+				parser().attribute_present("customHeight"))
 			{
-				ws.default_row_height(parser().attribute<double>("defaultRowHeight"));
+				if (is_true(parser().attribute("customHeight")))
+					ws.default_row_height(parser().attribute<double>("defaultRowHeight"));
 			}
         }
         else if (current_worksheet_element == qn_cols) // CT_Cols 0+
