@@ -34,11 +34,13 @@ namespace xlnt {
 	sheet_drawings::sheet_drawings(
 		worksheet* parent,
 		workbook::drawing_vector& drawings,
-		workbook::images_map& images
+		workbook::images_map& images,
+		path part
 	) :
 		parent_(parent),
 		drawings_(drawings),
-		images_(images)
+		images_(images),
+		part_(part)
 	{
 	}
 
@@ -47,7 +49,8 @@ namespace xlnt {
 	) :
 		parent_(other.parent_),
 		drawings_(other.drawings_),
-		images_(other.images_)
+		images_(other.images_),
+		part_(other.part_)
 	{
 	}
 
@@ -56,6 +59,7 @@ namespace xlnt {
 		this->parent_ = other.parent_;
 		this->drawings_ = other.drawings_;
 		this->images_ = other.images_;
+		this->part_ = other.part_;
 
 		return (*this);
 	}
@@ -68,6 +72,8 @@ namespace xlnt {
 	void sheet_drawings::add_drawing(const sheet_drawing& drawing)
 	{
 		drawings_.push_back(drawing);
+		// TODO: get part URI
+		// part_ =
 		parent_->register_drawings_in_manifest();
 	}
 
@@ -96,10 +102,9 @@ namespace xlnt {
 
 		const auto &manifest = parent_->d_->parent_->manifest();
 
-		path partPath;
-		if (manifest.has_relationship(partPath, relId))
+		if (manifest.has_relationship(part_, relId))
 		{
-			auto rel = manifest.relationship(partPath, relId);
+			auto rel = manifest.relationship(part_, relId);
 			const auto& it = images_.find(rel.target().path().string());
 			if (images_.end() == it)
 				return empty;

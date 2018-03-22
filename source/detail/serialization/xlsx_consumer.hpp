@@ -235,7 +235,7 @@ private:
 	/// <summary>
 	///
 	/// </summary>
-	void read_drawings(worksheet& ws, path rel_path);
+	void read_drawings(worksheet& ws);
 
 	void read_drawing_anchor(
 		const std::string& name,
@@ -270,7 +270,10 @@ private:
 	/// </summary>
 	void read_image(const path &part);
 
-	void read_drawing_images(worksheet& ws, const xlnt::path &image_path);
+	void read_drawing_image(
+		worksheet& ws, 
+		const xlnt::path &image_path,
+		const xlnt::path &relative_image_path);
 
     // Common Section Readers
 

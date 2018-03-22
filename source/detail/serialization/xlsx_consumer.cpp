@@ -1191,21 +1191,21 @@ worksheet xlsx_consumer::read_worksheet_end(const std::string &rel_id)
 
 	if (manifest.has_relationship(sheet_path, xlnt::relationship_type::drawings))
 	{
-		auto drawings_part = manifest.canonicalize({ workbook_rel, sheet_rel,
+		ws.d_->sheet_drawings_part_ = manifest.canonicalize({ workbook_rel, sheet_rel,
 			manifest.relationship(sheet_path, xlnt::relationship_type::drawings) });
 		
-		for (const auto &package_rel : read_relationships(drawings_part))
+		for (const auto &package_rel : read_relationships(ws.d_->sheet_drawings_part_))
 		{
 			auto image_path = manifest.canonicalize({ workbook_rel, sheet_rel, package_rel });
-			read_drawing_images(ws, image_path);
+			read_drawing_image(ws, image_path, package_rel.target().path());
 		}
 
-		auto drawings_part_streambuf = archive_->open(drawings_part);
+		auto drawings_part_streambuf = archive_->open(ws.d_->sheet_drawings_part_);
 		std::istream drawings_part_stream(drawings_part_streambuf.get());
 		auto receive = xml::parser::receive_default;
-		xml::parser parser(drawings_part_stream, drawings_part.string(), receive);
+		xml::parser parser(drawings_part_stream, ws.d_->sheet_drawings_part_.string(), receive);
 		parser_ = &parser;
-		read_drawings(ws, drawings_part);
+		read_drawings(ws);
 	}
 
     return ws;
@@ -2560,7 +2560,7 @@ void xlsx_consumer::read_drawing_anchor(
 	expect_end_element(qn("spreadsheetdrawing", name));
 }
 
-void xlsx_consumer::read_drawings(worksheet& ws, path rel_path)
+void xlsx_consumer::read_drawings(worksheet& ws)
 {
 	expect_start_element(qn("spreadsheetdrawing", "wsDr"), xml::content::complex);
 
@@ -2707,10 +2707,13 @@ void xlsx_consumer::read_unknown_relationships()
 {
 }
 
-void xlsx_consumer::read_drawing_images(worksheet& ws, const xlnt::path &image_path)
+void xlsx_consumer::read_drawing_image(
+	worksheet& ws, 
+	const xlnt::path &image_path, 
+	const xlnt::path &relative_image_path)
 {
 	auto image_streambuf = archive_->open(image_path);	
-	vector_ostreambuf buffer(ws.d_->sheet_images_[image_path.string()]);
+	vector_ostreambuf buffer(ws.d_->sheet_images_[relative_image_path.string()]);
 	std::ostream out_stream(&buffer);
 	out_stream << image_streambuf.get();
 }

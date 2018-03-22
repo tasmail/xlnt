@@ -121,6 +121,7 @@ struct worksheet_impl
 
     std::unordered_map<std::string, comment> comments_;
 
+	path sheet_drawings_part_;
 	workbook::drawing_vector sheet_drawings_;	
 	workbook::images_map sheet_images_;
 };

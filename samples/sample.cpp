@@ -35,6 +35,7 @@ void load_image()
 
 		if (sheet_drawing.picture_name.is_set()) {
 			printf(sheet_drawing.picture_name.get().c_str());
+			printf("\n");
 			printf("Data lenght: %d", data.size());
 			printf("\n");
 		}
