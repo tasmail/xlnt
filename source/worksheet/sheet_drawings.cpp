@@ -64,6 +64,12 @@ namespace xlnt {
 		return (*this);
 	}
 
+	void sheet_drawings::register_relations()
+	{
+		if (!part_.string().size())
+			part_ = parent_->register_drawings_in_manifest();
+	}
+
 	const workbook::drawing_vector& sheet_drawings::drawings() const
 	{
 		return drawings_;
@@ -71,10 +77,9 @@ namespace xlnt {
 
 	void sheet_drawings::add_drawing(const sheet_drawing& drawing)
 	{
+		register_relations();
+		
 		drawings_.push_back(drawing);
-		// TODO: get part URI
-		// part_ =
-		parent_->register_drawings_in_manifest();
 	}
 
 	void sheet_drawings::add_drawing_image(
@@ -83,6 +88,8 @@ namespace xlnt {
 		const std::string &extension
 	)
 	{
+		register_relations();
+
 		sheet_drawing drawing_ = drawing;
 		
 		// TODO: generate picture content

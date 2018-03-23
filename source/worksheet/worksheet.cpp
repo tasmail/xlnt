@@ -1074,9 +1074,9 @@ register_comments_in_manifest()
 	workbook().register_worksheet_part(*this, relationship_type::comments);
 }
 
-void worksheet::register_drawings_in_manifest()
+path worksheet::register_drawings_in_manifest()
 {
-	workbook().register_worksheet_part(*this, relationship_type::drawings);
+	return workbook().register_worksheet_part(*this, relationship_type::drawings);
 }
 
 void worksheet::register_calc_chain_in_manifest()

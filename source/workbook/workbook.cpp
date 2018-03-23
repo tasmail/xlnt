@@ -518,7 +518,7 @@ void workbook::register_workbook_part(relationship_type type)
     }
 }
 
-void workbook::register_worksheet_part(worksheet ws, relationship_type type)
+path workbook::register_worksheet_part(worksheet ws, relationship_type type)
 {
     auto wb_rel = manifest().relationship(path("/"),
         relationship_type::office_document);
@@ -542,7 +542,12 @@ void workbook::register_worksheet_part(worksheet ws, relationship_type type)
 					manifest().relationships(wb_rel.target().path(), xlnt::relationship_type::worksheet))
 				{
 					path current_ws_path(current_ws_rel.source().path().parent().append(current_ws_rel.target().path()));
-					if (!manifest().has_relationship(current_ws_path, xlnt::relationship_type::drawings)) continue;
+					if (!manifest().has_relationship(
+						current_ws_path,
+						xlnt::relationship_type::drawings))
+					{
+						continue;
+					}
 
 					for (auto current_ws_child_rel :
 						manifest().relationships(current_ws_path, xlnt::relationship_type::drawings))
@@ -563,12 +568,21 @@ void workbook::register_worksheet_part(worksheet ws, relationship_type type)
 			}
 
 			const path relative_path(path("../drawings").append(filename));
-			manifest().register_relationship(
-				uri(ws_path.string()), relationship_type::vml_drawing, uri(relative_path.string()), target_mode::internal);
+			auto relId = manifest().register_relationship(
+				uri(ws_path.string()), relationship_type::drawings, uri(relative_path.string()), target_mode::internal);
+
+			auto drawing_rel = manifest().relationship(ws_path, relId);
+			
+			return manifest().canonicalize({ wb_rel, ws_rel, drawing_rel });
+		}
+		else 
+		{
+			auto drawing_rel = manifest().relationship(ws_path, relationship_type::drawings);
+			return manifest().canonicalize({ wb_rel, ws_rel, drawing_rel });
 		}
 	}
-
-    if (type == relationship_type::comments)
+	
+	if (type == relationship_type::comments)
     {
         if (!manifest().has_relationship(ws_path, relationship_type::vml_drawing))
         {
@@ -609,7 +623,7 @@ void workbook::register_worksheet_part(worksheet ws, relationship_type type)
             const path relative_path(path("../drawings").append(filename));
             manifest().register_relationship(
                 uri(ws_path.string()), relationship_type::vml_drawing, uri(relative_path.string()), target_mode::internal);
-        }
+		}
 
         if (!manifest().has_relationship(ws_path, relationship_type::comments))
         {
@@ -629,10 +643,20 @@ void workbook::register_worksheet_part(worksheet ws, relationship_type type)
                 absolute_path, "application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml");
 
             const path relative_path(path("..").append(filename));
-            manifest().register_relationship(
+            auto relId = manifest().register_relationship(
                 uri(ws_path.string()), relationship_type::comments, uri(relative_path.string()), target_mode::internal);
+
+			auto comments_rel = manifest().relationship(ws_path, relId);
+			return manifest().canonicalize({ wb_rel, ws_rel, comments_rel });
         }
+		else
+		{
+			auto comments_rel = manifest().relationship(ws_path, relationship_type::comments);
+			return manifest().canonicalize({ wb_rel, ws_rel, comments_rel });
+		}
     }
+
+	return path();
 }
 
 const worksheet workbook::sheet_by_title(const std::string &title) const

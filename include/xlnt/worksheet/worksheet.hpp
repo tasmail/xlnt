@@ -760,7 +760,7 @@ private:
 	/// <summary>
 	/// Creates a drawings part in the manifest as a relationship target of this sheet.
 	/// </summary>
-	void worksheet::register_drawings_in_manifest();
+	path worksheet::register_drawings_in_manifest();
 
     /// <summary>
     /// Creates a calcChain part in the manifest if it doesn't already exist.

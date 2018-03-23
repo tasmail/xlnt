@@ -69,6 +69,8 @@ private:
 	friend class sheet_drawing;
 	friend class detail::xlsx_consumer;
 
+	void register_relations();
+
 	void add_drawing(
 		const sheet_drawing& drawing);
 

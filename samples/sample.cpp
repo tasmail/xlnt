@@ -36,7 +36,7 @@ void load_image()
 		if (sheet_drawing.picture_name.is_set()) {
 			printf(sheet_drawing.picture_name.get().c_str());
 			printf("\n");
-			printf("Data lenght: %d", data.size());
+			printf("Data lenght: %d", (int)data.size());
 			printf("\n");
 		}
 	}
@@ -88,6 +88,8 @@ void sample2()
 
 int main()
 {
+	save_image();
+
 	load_image();
 
 	sample2();

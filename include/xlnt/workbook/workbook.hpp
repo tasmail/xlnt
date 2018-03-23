@@ -878,7 +878,7 @@ private:
     /// for that particular relationship type. It will be a relationship target
     /// of the given worksheet, ws.
     /// </summary>
-    void register_worksheet_part(worksheet ws, relationship_type type);
+    path register_worksheet_part(worksheet ws, relationship_type type);
 
     /// <summary>
     /// Removes calcChain part from manifest if no formulae remain in workbook.
