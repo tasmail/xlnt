@@ -47,7 +47,7 @@ public:
 		worksheet* parent_, 
 		workbook::drawing_vector& drawings,
 		workbook::images_map& images,
-		path part);
+		path& part);
 	
 	sheet_drawings(const sheet_drawings& other);
 
@@ -77,7 +77,7 @@ private:
 	worksheet* parent_;
 	workbook::drawing_vector& drawings_;
 	workbook::images_map& images_;
-	path part_;
+	path& part_;
 };
 
 } // namespace xlnt

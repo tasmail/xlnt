@@ -35,7 +35,7 @@ namespace xlnt {
 		worksheet* parent,
 		workbook::drawing_vector& drawings,
 		workbook::images_map& images,
-		path part
+		path& part
 	) :
 		parent_(parent),
 		drawings_(drawings),

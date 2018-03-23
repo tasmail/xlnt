@@ -41,6 +41,12 @@ namespace detail
 class XLNT_API sheet_drawing
 {
 public:
+	sheet_drawing()
+	{
+		from_col_offset = 0;
+		from_row_offset = 0;
+	}
+
 	cell_reference from;
 	int from_col_offset;
 	int from_row_offset;

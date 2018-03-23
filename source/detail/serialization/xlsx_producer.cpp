@@ -3012,6 +3012,9 @@ void xlsx_producer::write_vml_drawings(const relationship &rel, worksheet ws, co
 
 void xlsx_producer::write_drawings(const relationship &rel, worksheet ws)
 {
+	auto drawing_part = ws.d_->sheet_drawings_part_;
+	auto drawing_rels = source_.manifest().relationships(drawing_part);
+	write_relationships(drawing_rels, drawing_part);
 }
 
 // Other Parts
