@@ -880,6 +880,19 @@ private:
     /// </summary>
     path register_worksheet_part(worksheet ws, relationship_type type);
 
+	/// <summary>
+	/// Adds a worksheet-drawing-level part of the given type to the manifest if it doesn't
+	/// already exist. The part will have a path and content type of the default
+	/// for that particular relationship type. It will be a relationship target
+	/// of the given worksheet, ws.
+	/// </summary>
+	std::string register_image_drawings_in_manifest(
+		worksheet ws, 
+		const path& parent_part, 
+		const std::string &extension,
+		std::string &image_name,
+		int& image_id);
+
     /// <summary>
     /// Removes calcChain part from manifest if no formulae remain in workbook.
     /// </summary>

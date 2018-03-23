@@ -518,6 +518,77 @@ void workbook::register_workbook_part(relationship_type type)
     }
 }
 
+std::string workbook::register_image_drawings_in_manifest(
+	worksheet ws, 
+	const path& parent_part, 
+	const std::string &extension,
+	std::string &image_name,
+	int& image_id)
+{
+	image_name.clear();
+	image_id = 1;
+
+	auto wb_rel = manifest().relationship(path("/"),
+		relationship_type::office_document);
+	auto ws_rel = manifest().relationship(wb_rel.target().path(),
+		d_->sheet_title_rel_id_map_.at(ws.title()));
+
+	path ws_path(ws_rel.source().path().parent().append(ws_rel.target().path()));
+	
+	std::string content_type = "image/";
+	if (extension == "jpg" || extension == "jpeg" || extension == "jpe")
+		content_type += "jpeg";
+	else if (extension == "ico")
+		content_type += "x-icon";
+	else if (extension == "svg")
+		content_type += "svg+xml";
+	else if (extension == "tiff" || extension == "tif")
+		content_type += "tiff";
+	else if (extension == "mcf")
+		content_type += "vasa";
+	else if (extension == "cod")
+		content_type += "cis-cod";
+	else if (extension == "wbmp")
+		content_type += "vnd.wap.wbmp";
+	else if (extension == "fh4" || extension == "fh5" || extension == "fhc")
+		content_type += "x-freehand";
+	else
+		content_type += extension;
+	
+	d_->manifest_.register_default_type(extension, content_type);
+
+	
+	path filename("image1." + extension);
+	bool filename_exists = true;
+
+	while (filename_exists)
+	{
+		filename_exists = false;
+
+		for (auto image_rel :
+			manifest().relationships(parent_part, xlnt::relationship_type::image))
+		{
+			if (image_rel.target().path() == path("../media").append(filename))
+			{
+				filename_exists = true;
+				break;
+			}
+		}
+
+		if (filename_exists)
+		{
+			image_id++;
+			filename = path("image" + std::to_string(image_id) + "." + extension);
+		}
+	}
+
+	image_name = filename.string();
+
+	const path relative_path(path("../media").append(filename));
+	return manifest().register_relationship(
+		uri(parent_part.string()), relationship_type::image, uri(relative_path.string()), target_mode::internal);
+}
+
 path workbook::register_worksheet_part(worksheet ws, relationship_type type)
 {
     auto wb_rel = manifest().relationship(path("/"),

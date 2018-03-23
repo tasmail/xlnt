@@ -1079,6 +1079,20 @@ path worksheet::register_drawings_in_manifest()
 	return workbook().register_worksheet_part(*this, relationship_type::drawings);
 }
 
+std::string worksheet::register_image_drawings_in_manifest(
+	const path& part, 
+	const std::string &extension,
+	std::string &image_name,
+	int& image_id)
+{
+	return workbook().register_image_drawings_in_manifest(
+		*this, 
+		part, 
+		extension, 
+		image_name,
+		image_id);
+}
+
 void worksheet::register_calc_chain_in_manifest()
 {
     workbook().register_workbook_part(relationship_type::calculation_chain);

@@ -91,9 +91,26 @@ namespace xlnt {
 		register_relations();
 
 		sheet_drawing drawing_ = drawing;
-		
-		// TODO: generate picture content
-		// drawing_.picture_path.set(std::string("xl/images/ssss.jpg"));
+		std::string picture_name;
+		int picture_id;
+
+		drawing_.picture_rel = parent_->register_image_drawings_in_manifest(
+			part_, 
+			extension, 
+			picture_name,
+			picture_id);
+
+		drawing_.picture_id = picture_id;
+		drawing_.picture_name = picture_name;
+
+		const auto &manifest = parent_->d_->parent_->manifest();
+
+		if (manifest.has_relationship(part_, drawing_.picture_rel.get()))
+		{
+			auto rel = manifest.relationship(part_, drawing_.picture_rel.get());
+			images_[rel.target().path().string()] = image;
+		}
+	
 		add_drawing(drawing_);
 	}
 

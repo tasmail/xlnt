@@ -47,12 +47,16 @@ public:
 	optional<cell_reference> to;
 	optional<int> to_col_offset;
 	optional<int> to_row_offset;
-	optional<std::string> picture_name;
+	optional<std::string> get_picture_name() const
+	{
+		return picture_name;
+	}
 private:
 	friend class sheet_drawings;
 	friend class detail::xlsx_consumer;
 	optional<int> picture_id;
 	optional<std::string> picture_rel;
+	optional<std::string> picture_name;
 };
 
 } // namespace xlnt

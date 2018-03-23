@@ -760,7 +760,16 @@ private:
 	/// <summary>
 	/// Creates a drawings part in the manifest as a relationship target of this sheet.
 	/// </summary>
-	path worksheet::register_drawings_in_manifest();
+	path register_drawings_in_manifest();
+
+	/// <summary>
+	/// Creates an image part in drawings part in the manifest as a relationship target of this sheet.
+	/// </summary>
+	std::string register_image_drawings_in_manifest(
+		const path& part, 
+		const std::string &extension,
+		std::string &image_name,
+		int& image_id);
 
     /// <summary>
     /// Creates a calcChain part in the manifest if it doesn't already exist.

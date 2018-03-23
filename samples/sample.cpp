@@ -32,9 +32,9 @@ void load_image()
 	for (const auto &sheet_drawing : sheet_drawings.drawings())
 	{
 		const auto& data = sheet_drawings.get_drawing_image(sheet_drawing);
-
-		if (sheet_drawing.picture_name.is_set()) {
-			printf(sheet_drawing.picture_name.get().c_str());
+		auto picture_name = sheet_drawing.get_picture_name();
+		if (picture_name.is_set()) {
+			printf(picture_name.get().c_str());
 			printf("\n");
 			printf("Data lenght: %d", (int)data.size());
 			printf("\n");
@@ -47,10 +47,10 @@ void save_image()
 	xlnt::workbook wb_image;
 
 	auto sheet_drawings = wb_image.active_sheet().sheet_drawings();
+	
 	xlnt::sheet_drawing drawing;
 	drawing.from.column_index(5);
 	drawing.from.row(5);
-	drawing.picture_name.set("cafe.jpg");
 
 	auto image_path = path_helper::sample_file("cafe.jpg");
 	std::ifstream file(image_path.string(), std::ios::binary);
@@ -62,6 +62,14 @@ void save_image()
 		std::istream_iterator<std::uint8_t>(file),
 		std::istream_iterator<std::uint8_t>());
 
+	sheet_drawings.add_drawing_image(
+		drawing,
+		image_data,
+		"jpg");
+
+
+	drawing.from.column_index(20);
+	drawing.from.row(20);
 	sheet_drawings.add_drawing_image(
 		drawing,
 		image_data,
