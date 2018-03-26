@@ -96,6 +96,10 @@ private:
     void write_extended_properties(const relationship &rel);
     void write_custom_properties(const relationship &rel);
     void write_image(const path &image_path);
+	void write_drawing_image(
+		worksheet& ws,
+		const path &image_path,
+		const xlnt::path &relative_image_path);
 
 	// SpreadsheetML-Specific Package Parts
 
@@ -125,7 +129,10 @@ private:
 	void write_vml_drawings(const relationship &rel, worksheet ws, const std::vector<cell_reference> &cells);
 	
 	// Drawings
-	void write_drawings(const relationship &rel, worksheet ws);
+	void write_drawings(
+		const relationship &drawing_rel,
+		const relationship &sheet_rel,
+		worksheet ws);
 
 	// Other Parts
 

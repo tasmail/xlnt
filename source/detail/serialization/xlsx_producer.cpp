@@ -2753,7 +2753,7 @@ void xlsx_producer::write_worksheet(const relationship &rel)
 			}
 			else if (child_rel.type() == relationship_type::drawings)
 			{
-				write_drawings(child_rel, ws);
+				write_drawings(child_rel, rel, ws);
 			}
 		}
     }
@@ -3010,11 +3010,26 @@ void xlsx_producer::write_vml_drawings(const relationship &rel, worksheet ws, co
     write_end_element("xml");
 }
 
-void xlsx_producer::write_drawings(const relationship &rel, worksheet ws)
+void xlsx_producer::write_drawings(
+	const relationship &drawing_rel, 
+	const relationship &sheet_rel, 
+	worksheet ws)
 {
+	auto &manifest = source_.manifest();
+	const auto workbook_rel = manifest.relationship(path("/"), relationship_type::office_document);
+
 	auto drawing_part = ws.d_->sheet_drawings_part_;
 	auto drawing_rels = source_.manifest().relationships(drawing_part);
 	write_relationships(drawing_rels, drawing_part);
+
+	for (auto &rel : drawing_rels)
+	{
+		auto image_path = manifest.canonicalize({ workbook_rel, sheet_rel, rel });
+		write_drawing_image(
+			ws,
+			image_path,
+			rel.target().path());
+	}
 }
 
 // Other Parts
@@ -3033,11 +3048,23 @@ void xlsx_producer::write_unknown_relationships()
 
 void xlsx_producer::write_image(const path &image_path)
 {
-    end_part();
+	end_part();
 
-    vector_istreambuf buffer(source_.d_->images_.at(image_path.string()));
-    auto image_streambuf = archive_->open(image_path);
-    std::ostream(image_streambuf.get()) << &buffer;
+	vector_istreambuf buffer(source_.d_->images_.at(image_path.string()));
+	auto image_streambuf = archive_->open(image_path);
+	std::ostream(image_streambuf.get()) << &buffer;
+}
+
+void xlsx_producer::write_drawing_image(
+	worksheet& ws,
+	const path &image_path,
+	const xlnt::path &relative_image_path)
+{
+	end_part();
+
+	vector_istreambuf buffer(ws.d_->sheet_images_[relative_image_path.string()]);
+	auto image_streambuf = archive_->open(image_path);
+	std::ostream(image_streambuf.get()) << &buffer;
 }
 
 std::string xlsx_producer::write_bool(bool boolean) const
