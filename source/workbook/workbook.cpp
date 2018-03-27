@@ -643,8 +643,12 @@ path workbook::register_worksheet_part(worksheet ws, relationship_type type)
 				uri(ws_path.string()), relationship_type::drawings, uri(relative_path.string()), target_mode::internal);
 
 			auto drawing_rel = manifest().relationship(ws_path, relId);
-			
-			return manifest().canonicalize({ wb_rel, ws_rel, drawing_rel });
+
+			auto rel_path = manifest().canonicalize({ wb_rel, ws_rel, drawing_rel });
+
+			manifest().register_override_type(rel_path, content_type(relationship_type::drawings));
+
+			return rel_path;
 		}
 		else 
 		{

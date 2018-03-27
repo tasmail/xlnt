@@ -52,6 +52,11 @@ void save_image()
 	drawing.from.column_index(5);
 	drawing.from.row(5);
 
+	xlnt::cell_reference to;	
+	to.column_index(40);
+	to.row(40);
+	drawing.to.set(to);
+
 	auto image_path = path_helper::sample_file("cafe.jpg");
 	std::ifstream file(image_path.string(), std::ios::binary);
 	file.unsetf(std::ios::skipws);
@@ -68,12 +73,12 @@ void save_image()
 		"jpg");
 
 
-	drawing.from.column_index(20);
-	drawing.from.row(20);
-	sheet_drawings.add_drawing_image(
-		drawing,
-		image_data,
-		"jpg");
+	//drawing.from.column_index(20);
+	//drawing.from.row(20);
+	//sheet_drawings.add_drawing_image(
+	//	drawing,
+	//	image_data,
+	//	"jpg");
 
 	wb_image.save(path_helper::sample_file("image~.xlsx"));
 }
