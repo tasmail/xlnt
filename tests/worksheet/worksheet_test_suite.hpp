@@ -349,6 +349,7 @@ public:
         auto ws = wb.active_sheet();
 
         ws.freeze_panes(ws.cell("b2"));
+		auto fp = ws.frozen_panes();
         xlnt_assert_equals(ws.frozen_panes(), "B2");
 
         ws.unfreeze_panes();

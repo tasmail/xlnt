@@ -124,6 +124,17 @@ struct worksheet_impl
 	path sheet_drawings_part_;
 	workbook::drawing_vector sheet_drawings_;	
 	workbook::images_map sheet_images_;
+
+	/// <summary>
+	/// Default row height.
+	/// </summary>
+	optional<double>  default_row_height_;
+
+	/// <summary>
+	/// Default column width.
+	/// </summary>
+	optional<double>  default_col_width_;
+
 };
 
 } // namespace detail
