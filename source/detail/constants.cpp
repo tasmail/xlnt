@@ -128,7 +128,7 @@ const std::unordered_map<std::string, std::string> &constants::namespaces()
             {"content-types", "http://schemas.openxmlformats.org/package/2006/content-types"},
             {"relationships", "http://schemas.openxmlformats.org/package/2006/relationships"},
             {"drawingml", "http://schemas.openxmlformats.org/drawingml/2006/main"},
-			{ "spreadsheetdrawing", "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" },
+			{"spreadsheetdrawing", "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" },
             {"workbook", "http://schemas.openxmlformats.org/spreadsheetml/2006/main"},
             {"core-properties", "http://schemas.openxmlformats.org/package/2006/metadata/core-properties"},
             {"extended-properties", "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"},
@@ -152,6 +152,7 @@ const std::unordered_map<std::string, std::string> &constants::namespaces()
             {"x15ac", "http://schemas.microsoft.com/office/spreadsheetml/2010/11/ac"},
             {"xml", "http://www.w3.org/XML/1998/namespace"},
             {"xsi", "http://www.w3.org/2001/XMLSchema-instance"},
+			{"a14", "http://schemas.microsoft.com/office/drawing/2010/main"},
 
             {"loext", "http://schemas.libreoffice.org/"}
         };

@@ -3023,6 +3023,106 @@ void xlsx_producer::write_drawings(
 	const relationship &sheet_rel, 
 	worksheet ws)
 {
+	// <xdr:wsDr xmlns : xdr = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns : a = "http://schemas.openxmlformats.org/drawingml/2006/main">
+
+	static const auto &xmlns_xdr = constants::ns("spreadsheetdrawing");
+	static const auto &xmlns_a = constants::ns("drawingml");
+	static const auto &xmlns_r = constants::ns("r");
+	static const auto &xmlns_a14 = constants::ns("a14");
+
+	write_start_element(xmlns_xdr, "wsDr");
+	write_namespace(xmlns_xdr, "xdr");
+	write_namespace(xmlns_a, "a");
+
+	for (auto &drawing = ws.d_->sheet_drawings_.begin(); drawing != ws.d_->sheet_drawings_.end(); drawing++)
+	{
+		auto isTwoCellAnchor = drawing->to.is_set();
+
+		if (isTwoCellAnchor)
+			write_start_element(xmlns_xdr, "twoCellAnchor");
+		else
+			write_start_element(xmlns_xdr, "oneCellAnchor");
+
+		write_start_element(xmlns_xdr, "from");
+		write_element(xmlns_xdr, "col", drawing->from.column_index());
+		write_element(xmlns_xdr, "colOff", drawing->from_col_offset);
+		write_element(xmlns_xdr, "row", drawing->from.row());
+		write_element(xmlns_xdr, "rowOff", drawing->from_row_offset);
+		write_end_element(xmlns_xdr, "from");
+
+		if (isTwoCellAnchor)
+		{
+			const auto &to = drawing->to.get();
+			write_start_element(xmlns_xdr, "to");
+			write_element(xmlns_xdr, "col", to.column_index());
+			if (drawing->to_col_offset.is_set())
+				write_element(xmlns_xdr, "colOff", drawing->to_col_offset.get());
+			write_element(xmlns_xdr, "row", to.row());
+			if (drawing->to_row_offset.is_set())
+				write_element(xmlns_xdr, "rowOff", drawing->to_row_offset.get());
+			write_end_element(xmlns_xdr, "to");
+		}
+
+		if (drawing->picture_rel.is_set())
+		{
+			write_start_element(xmlns_xdr, "pic");
+
+			write_start_element(xmlns_xdr, "nvPicPr");
+
+			write_start_element(xmlns_xdr, "cNvPr");
+			if (drawing->picture_id.is_set())
+				write_attribute("id", drawing->picture_id.get());
+			if (drawing->picture_name.is_set())
+				write_attribute("name", drawing->picture_name.get());
+			write_end_element(xmlns_xdr, "cNvPr");
+
+			write_start_element(xmlns_xdr, "cNvPicPr");
+			write_start_element(xmlns_a, "picLocks");
+			write_attribute("noChangeAspect", "1");
+			write_end_element(xmlns_a, "picLocks");
+			write_end_element(xmlns_xdr, "cNvPicPr");
+			
+			write_end_element(xmlns_xdr, "nvPicPr");
+
+			write_start_element(xmlns_xdr, "blipFill");
+
+			write_start_element(xmlns_a, "blip");
+			write_namespace(xmlns_xdr, "r");
+			write_attribute(xml::qname(xmlns_r, "embed"), drawing->picture_rel.get());
+			write_attribute("cstate", "print");
+
+			write_start_element(xmlns_a, "extLst");
+			write_start_element(xmlns_a, "ext");
+			write_attribute("uri", "{28A0092B-C50C-407E-A947-70E740481C1C}");
+			write_start_element(xmlns_a14, "useLocalDpi");
+			write_attribute("val", "0");
+			write_end_element(xmlns_a14, "useLocalDpi");
+			write_end_element(xmlns_a, "ext");
+			write_end_element(xmlns_a, "extLst");
+
+			write_end_element(xmlns_a, "blip");
+
+			write_start_element(xmlns_a, "stretch");
+			write_start_element(xmlns_a, "fillRect");
+			write_end_element(xmlns_a, "fillRect");
+			write_end_element(xmlns_a, "stretch");
+
+			write_end_element(xmlns_xdr, "blipFill");
+
+			write_end_element(xmlns_xdr, "pic");
+		}
+
+		write_start_element(xmlns_xdr, "clientData");
+		write_end_element(xmlns_xdr, "clientData");
+
+		if (isTwoCellAnchor)
+			write_end_element(xmlns_xdr, "twoCellAnchor");
+		else
+			write_end_element(xmlns_xdr, "oneCellAnchor");
+	}
+
+	write_end_element(xmlns_xdr, "wsDr");
+
 	auto &manifest = source_.manifest();
 	const auto workbook_rel = manifest.relationship(path("/"), relationship_type::office_document);
 

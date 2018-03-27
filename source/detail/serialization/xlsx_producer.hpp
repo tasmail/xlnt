@@ -49,6 +49,7 @@ class streaming_workbook_writer;
 class variant;
 class workbook;
 class worksheet;
+class sheet_drawing;
 
 namespace detail {
 
@@ -72,6 +73,7 @@ public:
 
 private:
     friend class xlnt::streaming_workbook_writer;
+	friend class xlnt::sheet_drawing;
 
     void open(std::ostream &destination);
 

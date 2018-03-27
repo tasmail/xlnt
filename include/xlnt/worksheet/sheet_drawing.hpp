@@ -34,6 +34,7 @@ class sheet_drawings;
 namespace detail
 {
 	class xlsx_consumer;
+	class xlsx_producer;
 }
 
 /// <summary>
@@ -60,6 +61,7 @@ public:
 private:
 	friend class sheet_drawings;
 	friend class detail::xlsx_consumer;
+	friend class detail::xlsx_producer;
 	optional<int> picture_id;
 	optional<std::string> picture_rel;
 	optional<std::string> picture_name;
