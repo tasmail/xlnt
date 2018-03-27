@@ -2540,17 +2540,13 @@ void xlsx_producer::write_worksheet(const relationship &rel)
 		write_end_element(xmlns, "pageMargins");
 	}
 
-	if (ws.d_->sheet_drawings_part_.string().size())
+		
+	if (source_.manifest().has_relationship(worksheet_part, relationship_type::drawings)) 
 	{
-		auto drawing_part = ws.d_->sheet_drawings_part_;
-		auto drawing_rels = source_.manifest().relationships(drawing_part);
-
-		for (auto drawing_rel : drawing_rels)
-		{
-			write_start_element(xmlns, "drawing");
-			write_attribute(xml::qname(xmlns_r, "id"), drawing_rel.id());
-			write_end_element(xmlns, "drawing");
-		}
+		auto drawing_rel = source_.manifest().relationship(worksheet_part, relationship_type::drawings);
+		write_start_element(xmlns, "drawing");
+		write_attribute(xml::qname(xmlns_r, "id"), drawing_rel.id());
+		write_end_element(xmlns, "drawing");
 	}
 
     if (ws.has_page_setup())
@@ -3058,11 +3054,9 @@ void xlsx_producer::write_drawings(
 
 		write_start_element(xmlns_xdr, "from");
 		write_element(xmlns_xdr, "col", drawing->from.column_index());
-		if (drawing->from_col_offset)
-			write_element(xmlns_xdr, "colOff", drawing->from_col_offset);
+		write_element(xmlns_xdr, "colOff", drawing->from_col_offset);
 		write_element(xmlns_xdr, "row", drawing->from.row());
-		if (drawing->from_row_offset)
-			write_element(xmlns_xdr, "rowOff", drawing->from_row_offset);
+		write_element(xmlns_xdr, "rowOff", drawing->from_row_offset);
 		write_end_element(xmlns_xdr, "from");
 
 		if (isTwoCellAnchor)
@@ -3072,9 +3066,13 @@ void xlsx_producer::write_drawings(
 			write_element(xmlns_xdr, "col", to.column_index());
 			if (drawing->to_col_offset.is_set())
 				write_element(xmlns_xdr, "colOff", drawing->to_col_offset.get());
+			else
+				write_element(xmlns_xdr, "colOff", 0);
 			write_element(xmlns_xdr, "row", to.row());
 			if (drawing->to_row_offset.is_set())
 				write_element(xmlns_xdr, "rowOff", drawing->to_row_offset.get());
+			else
+				write_element(xmlns_xdr, "rowOff", 0);
 			write_end_element(xmlns_xdr, "to");
 		}
 
@@ -3124,6 +3122,30 @@ void xlsx_producer::write_drawings(
 			write_end_element(xmlns_a, "stretch");
 
 			write_end_element(xmlns_xdr, "blipFill");
+
+			write_start_element(xmlns_xdr, "spPr");
+
+			write_start_element(xmlns_a, "xfrm");
+
+			write_start_element(xmlns_a, "off");
+			write_attribute("x", "0");
+			write_attribute("y", "0");
+			write_end_element(xmlns_a, "off");
+
+			write_start_element(xmlns_a, "ext");
+			write_attribute("cx", "0");
+			write_attribute("cy", "0");
+			write_end_element(xmlns_a, "ext");
+
+			write_end_element(xmlns_a, "xfrm");
+
+			write_start_element(xmlns_a, "prstGeom");
+			write_attribute("prst", "rect");
+			write_start_element(xmlns_a, "avLst");
+			write_end_element(xmlns_a, "avLst");
+			write_end_element(xmlns_a, "prstGeom");
+
+			write_end_element(xmlns_xdr, "spPr");
 
 			write_end_element(xmlns_xdr, "pic");
 		}

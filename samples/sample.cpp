@@ -49,12 +49,12 @@ void save_image()
 	auto sheet_drawings = wb_image.active_sheet().sheet_drawings();
 	
 	xlnt::sheet_drawing drawing;
-	drawing.from.column_index(5);
-	drawing.from.row(5);
+	drawing.from.column_index(2);
+	drawing.from.row(2);
 
 	xlnt::cell_reference to;	
-	to.column_index(40);
-	to.row(40);
+	to.column_index(7);
+	to.row(7);
 	drawing.to.set(to);
 
 	auto image_path = path_helper::sample_file("cafe.jpg");
@@ -73,12 +73,17 @@ void save_image()
 		"jpg");
 
 
-	//drawing.from.column_index(20);
-	//drawing.from.row(20);
-	//sheet_drawings.add_drawing_image(
-	//	drawing,
-	//	image_data,
-	//	"jpg");
+	drawing.from.column_index(15);
+	drawing.from.row(15);
+
+	to.column_index(21);
+	to.row(21);
+	drawing.to.set(to);
+
+	sheet_drawings.add_drawing_image(
+		drawing,
+		image_data,
+		"jpg");
 
 	wb_image.save(path_helper::sample_file("image~.xlsx"));
 }
