@@ -246,7 +246,7 @@ cell xlsx_consumer::read_cell()
 
     if (parser().attribute_present("s"))
     {
-		    cell.format(target_.format(std::stoull(parser().attribute("s"))));
+		cell.format(target_.format((size_t)std::stoull(parser().attribute("s"))));
     }
 
     auto has_value = false;
@@ -728,7 +728,7 @@ void xlsx_consumer::read_worksheet_sheetdata()
 
             if (parser().attribute_present("s"))
             {
-				cell.format(target_.format(std::stoull(parser().attribute("s"))));
+				cell.format(target_.format((size_t)std::stoull(parser().attribute("s"))));
             }
 
             auto has_value = false;
@@ -2623,12 +2623,16 @@ void xlsx_consumer::read_drawings(worksheet& ws)
 				auto blipFill = expect_start_element(xml::content::complex);
 				if (blipFill == qn("spreadsheetdrawing", "blipFill"))
 				{
-					expect_start_element(qn("drawingml", "blip"), xml::content::simple);
-					auto ns = constants::namespaces().find("r");
-					auto rel_id = parser().attribute<std::string>(xml::qname(ns->second, "embed", "r"));
-					sheet_drawing.picture_rel = rel_id;
+					auto drawingml = expect_start_element(xml::content::complex);
+					if (drawingml == qn("drawingml", "blip"))
+					{
+						auto rel_id = parser().attribute<std::string>(xml::qname(constants::ns("r"), "embed"));
+						sheet_drawing.picture_rel = rel_id;
+					}
 
-					expect_end_element(qn("drawingml", "blip"));
+					skip_remaining_content(drawingml);
+
+					expect_end_element(drawingml);
 				}
 
 				skip_remaining_content(blipFill);

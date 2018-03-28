@@ -3028,7 +3028,7 @@ void xlsx_producer::write_vml_drawings(const relationship &rel, worksheet ws, co
 }
 
 void xlsx_producer::write_drawings(
-	const relationship &drawing_rel, 
+	const relationship & /*drawing_rel*/, 
 	const relationship &sheet_rel, 
 	worksheet ws)
 {
@@ -3043,7 +3043,7 @@ void xlsx_producer::write_drawings(
 	write_namespace(xmlns_xdr, "xdr");
 	write_namespace(xmlns_a, "a");
 
-	for (auto &drawing = ws.d_->sheet_drawings_.begin(); drawing != ws.d_->sheet_drawings_.end(); drawing++)
+	for (auto drawing = ws.d_->sheet_drawings_.begin(); drawing != ws.d_->sheet_drawings_.end(); drawing++)
 	{
 		auto isTwoCellAnchor = drawing->to.is_set();
 

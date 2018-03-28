@@ -47,7 +47,7 @@ void save_image()
 	xlnt::workbook wb_image;
 
 	auto sheet_drawings = wb_image.active_sheet().sheet_drawings();
-	
+
 	xlnt::sheet_drawing drawing;
 	drawing.from.column_index(1);
 	drawing.from.row(3);
