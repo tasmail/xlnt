@@ -49,13 +49,17 @@ void save_image()
 	auto sheet_drawings = wb_image.active_sheet().sheet_drawings();
 	
 	xlnt::sheet_drawing drawing;
-	drawing.from.column_index(2);
-	drawing.from.row(2);
+	drawing.from.column_index(1);
+	drawing.from.row(3);
+	drawing.from_col_offset = 371475;
+	drawing.from_row_offset = 76200;
 
 	xlnt::cell_reference to;	
-	to.column_index(7);
-	to.row(7);
+	to.column_index(2);
+	to.row(5);
 	drawing.to.set(to);
+	drawing.to_col_offset.set(75384);
+	drawing.to_row_offset.set(8709);
 
 	auto image_path = path_helper::sample_file("cafe.jpg");
 	std::ifstream file(image_path.string(), std::ios::binary);
@@ -73,15 +77,16 @@ void save_image()
 		"jpg");
 
 
-	drawing.from.column_index(15);
-	drawing.from.row(15);
+	xlnt::sheet_drawing drawing2;
+	drawing2.from.column_index(15);
+	drawing2.from.row(15);
 
 	to.column_index(21);
 	to.row(21);
-	drawing.to.set(to);
+	drawing2.to.set(to);
 
 	sheet_drawings.add_drawing_image(
-		drawing,
+		drawing2,
 		image_data,
 		"jpg");
 
