@@ -2540,16 +2540,7 @@ void xlsx_producer::write_worksheet(const relationship &rel)
 		write_end_element(xmlns, "pageMargins");
 	}
 
-		
-	if (source_.manifest().has_relationship(worksheet_part, relationship_type::drawings)) 
-	{
-		auto drawing_rel = source_.manifest().relationship(worksheet_part, relationship_type::drawings);
-		write_start_element(xmlns, "drawing");
-		write_attribute(xml::qname(xmlns_r, "id"), drawing_rel.id());
-		write_end_element(xmlns, "drawing");
-	}
-
-    if (ws.has_page_setup())
+	if (ws.has_page_setup())
     {
         write_start_element(xmlns, "pageSetup");
         write_attribute(
@@ -2722,10 +2713,14 @@ void xlsx_producer::write_worksheet(const relationship &rel)
                 write_start_element(xmlns, "legacyDrawing");
                 write_attribute(xml::qname(xmlns_r, "id"), child_rel.id());
                 write_end_element(xmlns, "legacyDrawing");
-
-                // todo: there's only one of these per sheet, right?
-                break;
             }
+
+			if (child_rel.type() == xlnt::relationship_type::drawings)
+			{
+				write_start_element(xmlns, "drawing");
+				write_attribute(xml::qname(xmlns_r, "id"), child_rel.id());
+				write_end_element(xmlns, "drawing");
+			}
         }
     }
 
